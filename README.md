@@ -1,2 +1,1 @@
-# masterlingoExtension
-Extension to masterlingoapp.com
+# Masterlingo-Extension
