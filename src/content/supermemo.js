@@ -1,3 +1,5 @@
+const addSubtractDate = require('add-subtract-date');
+
 function calcFactor(oldFac, quality) {
   let newFac = oldFac + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
   if (newFac > 2.5) newFac = 2.5;

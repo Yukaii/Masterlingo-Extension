@@ -1,0 +1,24 @@
+$color-blue: #013e87;
+$color-red: #f62e11;
+$color-green: #25dea0;
+
+$color-white: #fff;
+$color-black: #000;
+
+$color-pink: #fce4e3;
+$color-red-light: #fe8f76;
+$color-red-light-2: lighten($color-red-light, 22);
+$color-green-light: lighten($color-green, 40);
+$color-blue-light: lighten($color-blue, 65);
+
+$color-grey-light-1: #f7f7f7;
+$color-grey-light-2: #eee;
+$color-grey-light-3: #ccc;
+$color-grey-light-4: #bbb;
+
+$color-grey-dark-1: #444;
+$color-grey-dark-2: #222;
+
+// STYLING
+$border-radius: 4px;
+$row-border-separator: solid 3px $color-grey-light-3;

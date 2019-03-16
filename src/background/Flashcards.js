@@ -20,9 +20,11 @@ class Flashcards {
     this.allFlashcards[flashcard._id] = flashcard;
     mslApi.updateFlashcard(flashcard);
   }
-  deleteFlashcard(flashcardId) {
+  deleteFlashcard(flashcardId, deleteFromDb = false) {
     this.allFlashcards = _.omit(this.allFlashcards, flashcardId);
-    mslApi.deleteFlashcard(flashcardId);
+    if (deleteFromDb) {
+      mslApi.deleteFlashcard(flashcardId);
+    }
   }
   addFlashcard(flashcard) {
     this.allFlashcards[flashcard._id] = flashcard;

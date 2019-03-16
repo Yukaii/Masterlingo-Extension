@@ -36,6 +36,12 @@ function addListeners() {
             console.log(flashcards);
             sendResponse({ ...flashcards });
         }
+      case 'put':
+        switch (request.function) {
+          case 'flashcards':
+            flashcards = request.payload;
+            sendResponse('success');
+        }
     }
   });
 }

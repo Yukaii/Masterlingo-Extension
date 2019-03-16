@@ -19190,9 +19190,11 @@ class Flashcards {
     this.allFlashcards[flashcard._id] = flashcard;
     _msLingoApi__WEBPACK_IMPORTED_MODULE_0__["default"].updateFlashcard(flashcard);
   }
-  deleteFlashcard(flashcardId) {
+  deleteFlashcard(flashcardId, deleteFromDb = false) {
     this.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_1___default.a.omit(this.allFlashcards, flashcardId);
-    _msLingoApi__WEBPACK_IMPORTED_MODULE_0__["default"].deleteFlashcard(flashcardId);
+    if (deleteFromDb) {
+      _msLingoApi__WEBPACK_IMPORTED_MODULE_0__["default"].deleteFlashcard(flashcardId);
+    }
   }
   addFlashcard(flashcard) {
     this.allFlashcards[flashcard._id] = flashcard;
@@ -19254,6 +19256,12 @@ function addListeners() {
             console.log(flashcards);
             sendResponse({ ...flashcards });
         }
+      case 'put':
+        switch (request.function) {
+          case 'flashcards':
+            flashcards = request.payload;
+            sendResponse('success');
+        }
     }
   });
 }
@@ -19278,7 +19286,7 @@ __webpack_require__.r(__webpack_exports__);
 console.log(axios__WEBPACK_IMPORTED_MODULE_0___default.a);
 
 const masterLingoApi = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-  baseURL: 'http://masterlingoapp.com/api'
+  baseURL: 'https://masterlingoapp.com/api'
 });
 
 async function login() {

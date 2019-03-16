@@ -1,18 +1,20 @@
 import TranslationBox from './TranslationBox';
 import supermemo from './supermemo';
+import axios from 'axios';
+import _ from 'lodash';
 
 function runContentScript() {
   let config = { native: '', foreign: '', loggedIn: false },
+    pageElements,
     flashcards,
     translationBox;
+
   const spanCode = '-198987';
 
   const readyStateCheckInterval = setInterval(function() {
     if (document.readyState === 'complete') {
       clearInterval(readyStateCheckInterval);
 
-      // ----------------------------------------------------------
-      // This part of the script triggers when page is done loading
       console.log('Hello. This message was sent from scripts/inject.js');
       // ----------------------------------------------------------
 
@@ -20,16 +22,20 @@ function runContentScript() {
         if (response) {
           console.log(response);
           config = { ...config, foreign: response.foreign, native: response.native, loggedIn: true };
+          pageElements = document.querySelectorAll('p, span');
           init();
           console.log(flashcards);
         }
       });
     }
-  }, 100);
+  }, 10);
 
   async function init() {
     getFlashcards(highlightPageWords);
     translationBox = new TranslationBox();
+    addEventListeners();
+    const response = await axios.get('https://masterlingoapp.com/api/flashcards');
+    console.log(response);
   }
 
   function getFlashcards() {
@@ -47,8 +53,7 @@ function runContentScript() {
   }
 
   function highlightPageWords(flashcards) {
-    let pageElements = document.querySelectorAll('p, span'),
-      elementHtml;
+    let elementHtml;
     for (let pageElement of pageElements) {
       // loop over all elements
       elementHtml = pageElement.innerHTML;
@@ -91,12 +96,76 @@ function runContentScript() {
   }
 
   function handleMarkedWordClick(e) {
-    console.log('word clicked');
     const clickedWordEl = e.target;
     const flashcardId = clickedWordEl.dataset.flashcardid;
     const flashcard = flashcards.allFlashcards[flashcardId];
-    console.log(flashcard);
     translationBox.show(clickedWordEl, flashcard);
+  }
+
+  function addEventListeners() {
+    document.addEventListener('click', function(event) {
+      const isNotClickInside = !translationBox.domSelector.contains(event.target),
+        isNotWordClick = !event.target.classList.contains('masterlingo__marked-word');
+      if (isNotClickInside && isNotWordClick) {
+        console.log('clicked outside');
+        translationBox.hide();
+        //the click was outside the specifiedElement, do something
+      }
+    });
+
+    function updateBgFlashcards() {
+      chrome.runtime.sendMessage({ method: 'put', function: 'flashcards', payload: flashcards }, response => {
+        console.log(response);
+      });
+    }
+
+    function updateHighlightedWords(method, flashcard) {
+      switch (method) {
+        case 'remove':
+          let highlightedWords = document.getElementsByClassName('masterlingo__marked-word');
+          Array.from(highlightedWords).forEach(element => {
+            if (element.dataset.flashcardid === flashcard._id) {
+              console.log('found a match');
+              element.outerHTML = element.innerHTML;
+            }
+          });
+          break;
+        case 'add':
+          highlightPageWords({ [flashcard._id]: flashcard });
+          break;
+      }
+    }
+
+    Array.from(document.getElementsByClassName('masterlingo__rating-button')).forEach(button => {
+      button.addEventListener('click', async e => {
+        translationBox.hide();
+        console.log(translationBox.currentFlashcard);
+        if (translationBox.currentFlashcard._id) {
+          console.log('rated!');
+          // handle card rating click
+          console.log(translationBox.flashcards);
+          const quality = e.target.id.split('-')[1];
+          const supermemoResults = supermemo(quality, translationBox.currentFlashcard);
+          console.log(flashcards);
+          if (quality > 3) {
+            updateHighlightedWords('remove', translationBox.currentFlashcard);
+            flashcards.allFlashcards = _.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
+          } else {
+            flashcards.allFlashcards._id = {
+              ...translationBox.currentFlashcard,
+              ..._.omit(supermemoResults, 'isRepeatAgain'),
+              alreadyRated: true
+            };
+          }
+          updateBgFlashcards();
+          const response = await axios.put(
+            `https://masterlingoapp.com/api/srs/${translationBox.currentFlashcard._id}`,
+            _.omit(supermemoResults, 'isRepeatAgain')
+          );
+          console.log(response);
+        }
+      });
+    });
   }
 }
 

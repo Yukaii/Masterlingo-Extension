@@ -1,0 +1,157 @@
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url("fonts/ProximaNovaT-Thin.woff2") format("woff2"), url("fonts/ProximaNovaT-Thin.woff") format("woff");
+  font-weight: 100;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url("fonts/ProximaNova-ThinIt.woff2") format("woff2"), url("fonts/ProximaNova-ThinIt.woff") format("woff");
+  font-weight: 100;
+  font-style: italic; }
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url("fonts/ProximaNova-Light.woff2") format("woff2"), url("fonts/ProximaNova-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url("fonts/ProximaNova-Regular.woff2") format("woff2"), url("fonts/ProximaNova-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url("fonts/ProximaNova-RegularIt.woff2") format("woff2"), url("fonts/ProximaNova-RegularIt.woff") format("woff");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url("fonts/ProximaNova-Semibold.woff2") format("woff2"), url("fonts/ProximaNova-Semibold.woff") format("woff");
+  font-weight: 500;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url("fonts/ProximaNova-Bold.woff2") format("woff2"), url("fonts/ProximaNova-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url("fonts/ProximaNova-Black.woff2") format("woff2"), url("fonts/ProximaNova-Black.woff") format("woff");
+  font-weight: 900;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/materialicons/v46/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format("woff2"); }
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased; }
+
+mark {
+  background-color: transparent !important;
+  color: currentColor !important; }
+
+.masterlingo__marked-word {
+  color: #db755e !important;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 0; }
+  .masterlingo__marked-word:hover {
+    color: #dba294 !important; }
+
+.masterlingo__translation-box {
+  background-color: #fff;
+  position: absolute;
+  min-width: 270px;
+  height: 100px;
+  transform: translate(-50%, -100%);
+  flex-direction: column;
+  display: none;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #444;
+  box-sizing: border-box;
+  border-radius: 4px; }
+  .masterlingo__translation-box--active {
+    display: flex;
+    z-index: 1000; }
+  .masterlingo__translation-box::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 15px;
+    width: 20px;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    background-color: #666; }
+
+.masterlingo__original-word--audio {
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px; }
+
+.masterlingo__translations-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 0 5px;
+  color: #444 !important; }
+
+.masterlingo__rating-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 27px;
+  box-sizing: border-box; }
+  .masterlingo__rating-buttons > div {
+    z-index: 0;
+    cursor: pointer;
+    font-weight: 500;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #444;
+    font-size: 11px;
+    transition: all 0.4s ease, color 0.5s ease, background-color 0.5s ease;
+    margin: 0; }
+    .masterlingo__rating-buttons > div:hover {
+      z-index: 1000;
+      color: #fff; }
+
+.masterlingo__rating-button--incorrect {
+  background-color: #ffeae5; }
+  .masterlingo__rating-button--incorrect:hover {
+    background-color: #fe8f76; }
+
+.masterlingo__rating-button--correct {
+  background-color: #d6f9ed; }
+  .masterlingo__rating-button--correct:hover {
+    background-color: #25dea0; }
+
+.masterlingo__rating-button--easy {
+  background-color: #d5e8ff; }
+  .masterlingo__rating-button--easy:hover {
+    background-color: #013e87; }

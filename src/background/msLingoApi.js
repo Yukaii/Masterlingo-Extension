@@ -2,7 +2,7 @@ import axios from 'axios';
 console.log(axios);
 
 const masterLingoApi = axios.create({
-  baseURL: 'http://masterlingoapp.com/api'
+  baseURL: 'https://masterlingoapp.com/api'
 });
 
 async function login() {

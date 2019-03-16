@@ -1,0 +1,105 @@
+mark {
+  background-color: transparent !important;
+  color: currentColor !important;
+}
+.masterlingo {
+  &__marked-word {
+    color: #db755e !important;
+    cursor: pointer;
+    background-color: transparent;
+    padding: 0;
+    &:hover {
+      color: #dba294 !important;
+    }
+  }
+  &__translation-box {
+    background-color: $color-white;
+    position: absolute;
+    min-width: 270px;
+    height: 100px;
+    transform: translate(-50%, -100%);
+    flex-direction: column;
+    // font-family: 'Proxima Nova' !important;
+    display: none;
+    @include box-shadow-1;
+    border: 1px solid $color-grey-dark-1;
+    box-sizing: border-box;
+    border-radius: $border-radius;
+    &--active {
+      display: flex;
+      z-index: 1000;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 15px;
+      width: 20px;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      background-color: #666;
+    }
+  }
+
+  &__original-word--audio {
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+  }
+  &__translations-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 0 5px;
+    color: $color-grey-dark-1 !important;
+  }
+
+  &__rating-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 27px;
+    box-sizing: border-box;
+    & > div {
+      z-index: 0;
+      cursor: pointer;
+      font-weight: 500;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $color-grey-dark-1;
+      font-size: 11px;
+      transition: all 0.4s ease, color 0.5s ease, background-color 0.5s ease;
+      margin: 0;
+      &:hover {
+        z-index: 1000;
+        color: $color-white;
+      }
+    }
+  }
+
+  &__rating-button {
+    &--incorrect {
+      background-color: $color-red-light-2;
+      &:hover {
+        background-color: $color-red-light;
+      }
+    }
+    &--correct {
+      background-color: $color-green-light;
+      &:hover {
+        background-color: $color-green;
+      }
+    }
+    &--easy {
+      background-color: $color-blue-light;
+      &:hover {
+        background-color: $color-blue;
+      }
+    }
+  }
+}
