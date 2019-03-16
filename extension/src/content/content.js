@@ -19482,6 +19482,7 @@ function runContentScript() {
               alreadyRated: true
             };
           }
+          console.log('UPDATING BG FLASHCARDS');
           updateBgFlashcards();
           const response = await axios__WEBPACK_IMPORTED_MODULE_2___default.a.put(
             `https://masterlingoapp.com/api/srs/${translationBox.currentFlashcard._id}`,
@@ -19490,6 +19491,11 @@ function runContentScript() {
           console.log(response);
         }
       });
+    });
+
+    document.addEventListener('selectionchange', function() {
+      console.log('Selection changed.');
+      console.log(window.getSelection());
     });
   }
 }

@@ -38,5 +38,5 @@
       "exclude_matches": ["http://www.masterlingoapp.com/"]
     }
   ],
-  "web_accessible_resources": ["assets/*.svg"]
+  "web_accessible_resources": ["assets/*.svg", "assets/fonts/*.woff", "assets/fonts/*.woff2"]
 }

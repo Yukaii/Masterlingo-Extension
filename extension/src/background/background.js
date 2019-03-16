@@ -19251,17 +19251,30 @@ function addListeners() {
         switch (request.function) {
           case 'config':
             sendResponse(config);
+            break;
           case 'flashcards':
             console.log('bg script sending cards');
             console.log(flashcards);
             sendResponse({ ...flashcards });
+            break;
+          default:
+            break;
         }
+        break;
       case 'put':
         switch (request.function) {
           case 'flashcards':
+            console.log('updating flashcards bg script');
+            console.log('REQUEST IS:');
+            console.log(request);
             flashcards = request.payload;
+            console.log(flashcards);
             sendResponse('success');
+            break;
+          default:
+            break;
         }
+        break;
     }
   });
 }
