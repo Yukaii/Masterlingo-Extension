@@ -1,4 +1,5 @@
 import TranslationBox from './TranslationBox';
+import NewCardBox from './NewCardBox';
 import supermemo from './supermemo';
 import axios from 'axios';
 import _ from 'lodash';
@@ -7,7 +8,8 @@ function runContentScript() {
   let config = { native: '', foreign: '', loggedIn: false },
     pageElements,
     flashcards,
-    translationBox;
+    translationBox,
+    newCardBox;
 
   const spanCode = '-198987';
 
@@ -33,6 +35,7 @@ function runContentScript() {
   async function init() {
     getFlashcards(highlightPageWords);
     translationBox = new TranslationBox();
+    newCardBox = new NewCardBox();
     addEventListeners();
     const response = await axios.get('https://masterlingoapp.com/api/flashcards');
     console.log(response);
@@ -104,7 +107,7 @@ function runContentScript() {
 
   function addEventListeners() {
     document.addEventListener('click', function(event) {
-      const isNotClickInside = !translationBox.domSelector.contains(event.target),
+      let isNotClickInside = !translationBox.domSelector.contains(event.target),
         isNotWordClick = !event.target.classList.contains('masterlingo__marked-word');
       if (isNotClickInside && isNotWordClick) {
         console.log('clicked outside');
@@ -168,9 +171,30 @@ function runContentScript() {
       });
     });
 
-    document.addEventListener('selectionchange', function() {
-      console.log('Selection changed.');
-      console.log(window.getSelection());
+    function handleClickOutside(e) {
+      console.log('handleClick outside');
+      const isNotClickInside = !newCardBox.domSelector.contains(e.target);
+      if (isNotClickInside && window.getSelection().toString.length < 1) {
+        console.log('hiding from content');
+        document.removeEventListener('click', handleClickOutside);
+        newCardBox.hide();
+      }
+    }
+
+    document.addEventListener('mouseup', function(e) {
+      let selection = window.getSelection(); //get the text range
+      if (selection.toString()) {
+        newCardBox.showButton(selection);
+        setTimeout(() => {
+          document.addEventListener('click', handleClickOutside);
+        }, 500);
+      }
+    });
+    newCardBox.domSelector.addEventListener('click', e => {
+      if (newCardBox.stage === 'button') {
+        console.log('clicked button');
+        newCardBox.showTranslations();
+      }
     });
   }
 }

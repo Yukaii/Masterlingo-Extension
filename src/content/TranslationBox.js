@@ -1,6 +1,4 @@
-import supermemo from './supermemo';
 import _ from 'lodash';
-import axios from 'axios';
 
 class TranslationBox {
   constructor(flashcards) {
@@ -32,17 +30,18 @@ class TranslationBox {
 
     this.domSelector.innerHTML = `<img src="${volumeIconSrc}" class="masterlingo__original-word--audio" /><div class="masterlingo__translations-container"></div><div class="masterlingo__rating-buttons">${rateButtonsHtml}</div>`;
     this.translationsDomSelector = document.querySelector('.masterlingo__translations-container');
+    this.ratingsDomSelector = document.querySelector('.masterlingo__rating-buttons');
   }
 
   show(wordElement, flashcard) {
     if (!flashcard) return;
     this.domSelector.classList.add(this.activeClass);
     const translations = flashcard.inverted ? flashcard.original : flashcard.translations;
-    let fontSize = 32;
+    let fontSize = 25;
     if (translations.length < 8) {
-      fontSize = 38;
+      fontSize = 32;
     } else if (translations.length > 18) {
-      fontSize = 25;
+      fontSize = 20;
     }
     this.translationsDomSelector.style.fontSize = fontSize + 'px';
     console.log(translations.join(', '));

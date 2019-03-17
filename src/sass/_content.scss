@@ -13,13 +13,138 @@ mark {
     }
   }
   &__translation-box {
-    background-color: $color-white;
-    position: absolute;
-    min-width: 270px;
-    height: 110px;
-    transform: translate(-50%, -100%);
     flex-direction: column;
-    // font-family: 'Proxima Nova' !important;
+    color: $color-black;
+  }
+  &__new-card--translations {
+    width: auto;
+    max-width: 250px;
+    min-width: 160px;
+    min-height: 100px;
+    background-color: $color-white;
+    width: max-content;
+  }
+  &__new-card--header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid $color-grey-light-1;
+  }
+  &__new-card--term {
+    font-size: 25px;
+    margin-right: 8px;
+    font-weight: 500;
+  }
+  &__new-card--pos {
+    font-style: italic;
+    color: $color-grey-light-3;
+    margin-right: 10px;
+    user-select: none;
+  }
+
+  &__new-card--audio {
+    cursor: pointer;
+    margin-left: auto;
+  }
+  &__new-card--translation-container {
+    display: inline-block;
+    width: max-content;
+    position: relative;
+    &:last-of-type {
+      margin-right: 25px !important;
+    }
+    &:last-child {
+      margin-right: 25px !important;
+    }
+  }
+  // &__save-button {
+  //   font-size: 15px;
+  //   text-transform: uppercase;
+  //   font-weight: 600;
+  //   cursor: pointer;
+  //   background-color: $color-green;
+  //   border-radius: $border-radius;
+  //   color: $color-white;
+  //   display: inline-block;
+  //   @include box-shadow-1;
+  //   margin-left: auto;
+  //   position: absolute;
+  //   bottom: 14px;
+  //   right: 14px;
+  //   padding: 4px 6px;
+  // }
+  &__new-card--translation {
+    font-size: 17px;
+    display: inline-block;
+    border-radius: $border-radius;
+    @include transition-1;
+    align-items: center;
+    padding: 6px 8px 6px 22px;
+    background-color: $color-grey-light-2;
+    cursor: pointer;
+    margin: 4px;
+    position: relative;
+    user-select: none;
+    &:hover {
+      background-color: $color-green;
+      // transform: scale(1.05);
+      &::before {
+        transform: translateY(-50%) rotate(0deg) !important;
+      }
+    }
+    &::after,
+    &::before {
+      content: '';
+      height: 12px;
+      position: absolute;
+      width: 2px;
+      background-color: $color-grey-dark-1;
+      top: 50%;
+      left: 10px;
+      border-radius: 1px;
+      transition: all 0.2s;
+      transform: translateY(-50%) rotate(90deg);
+      z-index: 1000;
+    }
+    &.saved-translation {
+      background-color: lighten($color-green, 20%);
+      transform: scale(0.95);
+      &::before {
+        transform: translateY(-50%);
+      }
+      &::after,
+      &::before {
+        width: 3px;
+      }
+      box-shadow: none;
+    }
+  }
+  &__new-card--container {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+  }
+
+  &__translation-box {
+    background-color: $color-white;
+    min-width: 250px;
+    min-height: 110px;
+  }
+  &__translation-box,
+  &__new-card-box {
+    transform: translate(-50%, -100%);
+    &::after {
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      top: 100%;
+    }
+  }
+  &__translation-box,
+  &__new-card-box,
+  &__new-card--button {
+    font-family: 'Proxima Nova' !important;
+    position: absolute;
     display: none;
     @include box-shadow-1;
     border: 1px solid $color-grey-dark-1;
@@ -32,16 +157,37 @@ mark {
     &::after {
       content: '';
       position: absolute;
-      top: 100%;
       left: 50%;
       transform: translateX(-50%);
       height: 15px;
       width: 20px;
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
       background-color: #666;
     }
   }
-
+  &__new-card--button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    font-size: 20px;
+    font-weight: 600;
+    background-color: $color-blue;
+    color: $color-red-light;
+    cursor: pointer;
+    transform: translate(-50%, 100%);
+    transition: background-color 0.3s;
+    &:hover {
+      background-color: lighten($color-blue, 5);
+    }
+    &::after {
+      clip-path: polygon(0 100%, 100% 100%, 50% 0%);
+      top: -15px;
+    }
+    span {
+      color: $color-green;
+    }
+  }
   &__original-word--audio {
     cursor: pointer;
     position: absolute;
@@ -54,7 +200,8 @@ mark {
     justify-content: center;
     align-items: center;
     flex: 1;
-    padding: 0 5px;
+    padding: 14px 12px;
+    text-align: center;
     color: $color-grey-dark-1 !important;
   }
 

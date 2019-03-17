@@ -19216,6 +19216,125 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./src/content/NewCardBox.js":
+/*!***********************************!*\
+  !*** ./src/content/NewCardBox.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+class newCardBox {
+  constructor() {
+    let boxElement = document.createElement('div');
+    boxElement.className = 'masterlingo__new-card-box';
+    document.querySelector('body').appendChild(boxElement);
+    this.domSelector = document.querySelector('.masterlingo__new-card-box');
+    this.stage = 'hidden';
+    this.term = '';
+    this.translationsToSave = [];
+  }
+
+  showButton(selection) {
+    let wordElement = selection.getRangeAt(0);
+    console.log(wordElement);
+
+    if (!this.domSelector.contains(wordElement.commonAncestorContainer)) {
+      console.log(wordElement);
+      this.domSelector.classList.remove('masterlingo__new-card--translations');
+      this.domSelector.classList.add('masterlingo__new-card--button');
+      this.domSelector.classList.add('masterlingo__new-card-box--active');
+      this.setPosition(wordElement);
+      this.domSelector.innerHTML = `M<span>L</span>`;
+      this.term = selection.toString();
+      this.stage = 'button';
+    }
+  }
+
+  async showTranslations() {
+    let translationsHTML;
+    this.stage = 'translations';
+    this.domSelector.classList.replace('masterlingo__new-card--button', 'masterlingo__new-card--translations');
+    const { data } = await axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(`https://masterlingoapp.com/api/translate/${this.term}`, {
+      headers: {
+        inverted: false
+      }
+    });
+    if (data.translations) {
+      translationsHTML = data.translations.slice(0, 6).map(translation => {
+        return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
+      });
+    }
+    const volumeIconSrc = chrome.extension.getURL('assets/volume.svg');
+    this.domSelector.innerHTML = `<div class="masterlingo__new-card--container"><div class="masterlingo__new-card--header"><div class="masterlingo__new-card--term" >${
+      this.term
+    }</div>
+    <div class="masterlingo__new-card--pos" >${data.partOfSpeech[0].toLowerCase()}</div><img src="${volumeIconSrc}" class="masterlingo__new-card--audio" /></div>${translationsHTML.join(
+      ''
+    )}</div>`;
+    console.log(data);
+    Array.from(document.getElementsByClassName('masterlingo__new-card--translation')).forEach(translationEl => {
+      translationEl.addEventListener('click', () => {
+        if (translationEl.classList.contains('saved-translation')) {
+          this.translationsToSave.splice(this.translationsToSave.indexOf(translationEl.textContent), 1);
+          translationEl.classList.remove('saved-translation');
+        } else if (this.translationsToSave.length < 4) {
+          this.translationsToSave.push(translationEl.textContent);
+          translationEl.classList.add('saved-translation');
+        } else {
+          alert(`You cannot save more than 4 translations at once, sorry :(`);
+        }
+      });
+    });
+  }
+
+  async hide() {
+    this.stage = 'hidden';
+    this.domSelector.classList.remove('masterlingo__new-card--button');
+    this.domSelector.classList.remove('masterlingo__new-card-box--active');
+    if (this.translationsToSave.length > 0) {
+      const response = await axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('https://masterlingoapp.com/api/flashcards', {
+        translations: this.translationsToSave,
+        inverted: false,
+        original: [this.term]
+      });
+      console.log(response);
+      this.translationsToSave = [];
+    }
+    this.term = '';
+  }
+
+  setPosition(wordElement) {
+    const wordOffset = this.getOffset(wordElement);
+    console.log(wordElement);
+    this.domSelector.style.left = wordOffset.left + wordOffset.width / 2 + 'px';
+    this.domSelector.style.top = wordOffset.top - 15 + 'px';
+  }
+
+  getOffset(element) {
+    const rect = element.getBoundingClientRect();
+    console.log(rect);
+    return {
+      left: rect.left + window.scrollX,
+      top: rect.top + window.scrollY,
+      width: rect.width
+    };
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (newCardBox);
+
+
+/***/ }),
+
 /***/ "./src/content/TranslationBox.js":
 /*!***************************************!*\
   !*** ./src/content/TranslationBox.js ***!
@@ -19225,13 +19344,8 @@ module.exports = function(module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _supermemo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./supermemo */ "./src/content/supermemo.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-
-
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 
 
 class TranslationBox {
@@ -19264,17 +19378,18 @@ class TranslationBox {
 
     this.domSelector.innerHTML = `<img src="${volumeIconSrc}" class="masterlingo__original-word--audio" /><div class="masterlingo__translations-container"></div><div class="masterlingo__rating-buttons">${rateButtonsHtml}</div>`;
     this.translationsDomSelector = document.querySelector('.masterlingo__translations-container');
+    this.ratingsDomSelector = document.querySelector('.masterlingo__rating-buttons');
   }
 
   show(wordElement, flashcard) {
     if (!flashcard) return;
     this.domSelector.classList.add(this.activeClass);
     const translations = flashcard.inverted ? flashcard.original : flashcard.translations;
-    let fontSize = 32;
+    let fontSize = 25;
     if (translations.length < 8) {
-      fontSize = 38;
+      fontSize = 32;
     } else if (translations.length > 18) {
-      fontSize = 25;
+      fontSize = 20;
     }
     this.translationsDomSelector.style.fontSize = fontSize + 'px';
     console.log(translations.join(', '));
@@ -19318,11 +19433,13 @@ class TranslationBox {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TranslationBox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TranslationBox */ "./src/content/TranslationBox.js");
-/* harmony import */ var _supermemo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./supermemo */ "./src/content/supermemo.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _NewCardBox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewCardBox */ "./src/content/NewCardBox.js");
+/* harmony import */ var _supermemo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./supermemo */ "./src/content/supermemo.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -19332,7 +19449,8 @@ function runContentScript() {
   let config = { native: '', foreign: '', loggedIn: false },
     pageElements,
     flashcards,
-    translationBox;
+    translationBox,
+    newCardBox;
 
   const spanCode = '-198987';
 
@@ -19358,8 +19476,9 @@ function runContentScript() {
   async function init() {
     getFlashcards(highlightPageWords);
     translationBox = new _TranslationBox__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    newCardBox = new _NewCardBox__WEBPACK_IMPORTED_MODULE_1__["default"]();
     addEventListeners();
-    const response = await axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('https://masterlingoapp.com/api/flashcards');
+    const response = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('https://masterlingoapp.com/api/flashcards');
     console.log(response);
   }
 
@@ -19429,7 +19548,7 @@ function runContentScript() {
 
   function addEventListeners() {
     document.addEventListener('click', function(event) {
-      const isNotClickInside = !translationBox.domSelector.contains(event.target),
+      let isNotClickInside = !translationBox.domSelector.contains(event.target),
         isNotWordClick = !event.target.classList.contains('masterlingo__marked-word');
       if (isNotClickInside && isNotWordClick) {
         console.log('clicked outside');
@@ -19470,32 +19589,53 @@ function runContentScript() {
           // handle card rating click
           console.log(translationBox.flashcards);
           const quality = e.target.id.split('-')[1];
-          const supermemoResults = Object(_supermemo__WEBPACK_IMPORTED_MODULE_1__["default"])(quality, translationBox.currentFlashcard);
+          const supermemoResults = Object(_supermemo__WEBPACK_IMPORTED_MODULE_2__["default"])(quality, translationBox.currentFlashcard);
           console.log(flashcards);
           if (quality > 3) {
             updateHighlightedWords('remove', translationBox.currentFlashcard);
-            flashcards.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
+            flashcards.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
           } else {
             flashcards.allFlashcards._id = {
               ...translationBox.currentFlashcard,
-              ...lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(supermemoResults, 'isRepeatAgain'),
+              ...lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(supermemoResults, 'isRepeatAgain'),
               alreadyRated: true
             };
           }
           console.log('UPDATING BG FLASHCARDS');
           updateBgFlashcards();
-          const response = await axios__WEBPACK_IMPORTED_MODULE_2___default.a.put(
+          const response = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put(
             `https://masterlingoapp.com/api/srs/${translationBox.currentFlashcard._id}`,
-            lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(supermemoResults, 'isRepeatAgain')
+            lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(supermemoResults, 'isRepeatAgain')
           );
           console.log(response);
         }
       });
     });
 
-    document.addEventListener('selectionchange', function() {
-      console.log('Selection changed.');
-      console.log(window.getSelection());
+    function handleClickOutside(e) {
+      console.log('handleClick outside');
+      const isNotClickInside = !newCardBox.domSelector.contains(e.target);
+      if (isNotClickInside && window.getSelection().toString.length < 1) {
+        console.log('hiding from content');
+        document.removeEventListener('click', handleClickOutside);
+        newCardBox.hide();
+      }
+    }
+
+    document.addEventListener('mouseup', function(e) {
+      let selection = window.getSelection(); //get the text range
+      if (selection.toString()) {
+        newCardBox.showButton(selection);
+        setTimeout(() => {
+          document.addEventListener('click', handleClickOutside);
+        }, 500);
+      }
+    });
+    newCardBox.domSelector.addEventListener('click', e => {
+      if (newCardBox.stage === 'button') {
+        console.log('clicked button');
+        newCardBox.showTranslations();
+      }
     });
   }
 }

@@ -80,30 +80,142 @@ mark {
     color: #dba294 !important; }
 
 .masterlingo__translation-box {
-  background-color: #fff;
-  position: absolute;
-  min-width: 270px;
-  height: 110px;
-  transform: translate(-50%, -100%);
   flex-direction: column;
+  color: #000; }
+
+.masterlingo__new-card--translations {
+  width: auto;
+  max-width: 250px;
+  min-width: 160px;
+  min-height: 100px;
+  background-color: #fff;
+  width: max-content; }
+
+.masterlingo__new-card--header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #f7f7f7; }
+
+.masterlingo__new-card--term {
+  font-size: 25px;
+  margin-right: 8px;
+  font-weight: 500; }
+
+.masterlingo__new-card--pos {
+  font-style: italic;
+  color: #ccc;
+  margin-right: 10px;
+  user-select: none; }
+
+.masterlingo__new-card--audio {
+  cursor: pointer;
+  margin-left: auto; }
+
+.masterlingo__new-card--translation-container {
+  display: inline-block;
+  width: max-content;
+  position: relative; }
+  .masterlingo__new-card--translation-container:last-of-type {
+    margin-right: 25px !important; }
+  .masterlingo__new-card--translation-container:last-child {
+    margin-right: 25px !important; }
+
+.masterlingo__new-card--translation {
+  font-size: 17px;
+  display: inline-block;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  align-items: center;
+  padding: 6px 8px 6px 22px;
+  background-color: #eee;
+  cursor: pointer;
+  margin: 4px;
+  position: relative;
+  user-select: none; }
+  .masterlingo__new-card--translation:hover {
+    background-color: #25dea0; }
+    .masterlingo__new-card--translation:hover::before {
+      transform: translateY(-50%) rotate(0deg) !important; }
+  .masterlingo__new-card--translation::after, .masterlingo__new-card--translation::before {
+    content: '';
+    height: 12px;
+    position: absolute;
+    width: 2px;
+    background-color: #444;
+    top: 50%;
+    left: 10px;
+    border-radius: 1px;
+    transition: all 0.2s;
+    transform: translateY(-50%) rotate(90deg);
+    z-index: 1000; }
+  .masterlingo__new-card--translation.saved-translation {
+    background-color: #7eebc7;
+    transform: scale(0.95);
+    box-shadow: none; }
+    .masterlingo__new-card--translation.saved-translation::before {
+      transform: translateY(-50%); }
+    .masterlingo__new-card--translation.saved-translation::after, .masterlingo__new-card--translation.saved-translation::before {
+      width: 3px; }
+
+.masterlingo__new-card--container {
+  width: 100%;
+  height: 100%;
+  padding: 10px; }
+
+.masterlingo__translation-box {
+  background-color: #fff;
+  min-width: 250px;
+  min-height: 110px; }
+
+.masterlingo__translation-box, .masterlingo__new-card-box {
+  transform: translate(-50%, -100%); }
+  .masterlingo__translation-box::after, .masterlingo__new-card-box::after {
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    top: 100%; }
+
+.masterlingo__translation-box, .masterlingo__new-card-box, .masterlingo__new-card--button {
+  font-family: 'Proxima Nova' !important;
+  position: absolute;
   display: none;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
   border: 1px solid #444;
   box-sizing: border-box;
   border-radius: 4px; }
-  .masterlingo__translation-box--active {
+  .masterlingo__translation-box--active, .masterlingo__new-card-box--active, .masterlingo__new-card--button--active {
     display: flex;
     z-index: 1000; }
-  .masterlingo__translation-box::after {
+  .masterlingo__translation-box::after, .masterlingo__new-card-box::after, .masterlingo__new-card--button::after {
     content: '';
     position: absolute;
-    top: 100%;
     left: 50%;
     transform: translateX(-50%);
     height: 15px;
     width: 20px;
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
     background-color: #666; }
+
+.masterlingo__new-card--button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  font-size: 20px;
+  font-weight: 600;
+  background-color: #013e87;
+  color: #fe8f76;
+  cursor: pointer;
+  transform: translate(-50%, 100%);
+  transition: background-color 0.3s; }
+  .masterlingo__new-card--button:hover {
+    background-color: #014aa0; }
+  .masterlingo__new-card--button::after {
+    clip-path: polygon(0 100%, 100% 100%, 50% 0%);
+    top: -15px; }
+  .masterlingo__new-card--button span {
+    color: #25dea0; }
 
 .masterlingo__original-word--audio {
   cursor: pointer;
@@ -117,7 +229,8 @@ mark {
   justify-content: center;
   align-items: center;
   flex: 1;
-  padding: 0 5px;
+  padding: 14px 12px;
+  text-align: center;
   color: #444 !important; }
 
 .masterlingo__rating-buttons {
