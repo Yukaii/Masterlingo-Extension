@@ -69,15 +69,7 @@ class newCardBox {
     this.stage = 'hidden';
     this.domSelector.classList.remove('masterlingo__new-card--button');
     this.domSelector.classList.remove('masterlingo__new-card-box--active');
-    if (this.translationsToSave.length > 0) {
-      const response = await axios.post('https://masterlingoapp.com/api/flashcards', {
-        translations: this.translationsToSave,
-        inverted: false,
-        original: [this.term]
-      });
-      console.log(response);
-      this.translationsToSave = [];
-    }
+    this.translationsToSave = [];
     this.term = '';
   }
 

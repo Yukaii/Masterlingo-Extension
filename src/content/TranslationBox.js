@@ -34,18 +34,26 @@ class TranslationBox {
   }
 
   show(wordElement, flashcard) {
+    console.log('about to show');
+    console.log(flashcard);
     if (!flashcard) return;
     this.domSelector.classList.add(this.activeClass);
-    const translations = flashcard.inverted ? flashcard.original : flashcard.translations;
-    let fontSize = 25;
+    const translations = flashcard.inverted ? flashcard.original.join(', ') : flashcard.translations.join(', ');
+    let fontSize = 26;
     if (translations.length < 8) {
       fontSize = 32;
     } else if (translations.length > 18) {
-      fontSize = 20;
+      fontSize = 22;
+    }
+    console.log('changing font size');
+    console.log(fontSize);
+    if (flashcard.cannotRate) {
+      this.ratingsDomSelector.style.display = 'none';
+    } else {
+      this.ratingsDomSelector.style.display = 'grid';
     }
     this.translationsDomSelector.style.fontSize = fontSize + 'px';
-    console.log(translations.join(', '));
-    this.translationsDomSelector.textContent = translations.join(', ');
+    this.translationsDomSelector.textContent = translations;
     this.setPosition(wordElement);
     this.currentFlashcard = flashcard;
   }
