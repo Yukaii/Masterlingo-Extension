@@ -41,7 +41,7 @@ class newCardBox {
         inverted: false
       }
     });
-    if (data.translations && !data.error) {
+    if (data.translations && !data.errorg) {
       console.log(data);
       translationsHTML = data.translations.slice(0, 6).map(translation => {
         return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
