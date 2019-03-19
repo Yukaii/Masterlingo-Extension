@@ -18,7 +18,7 @@ mark {
   }
   &__new-card--translations {
     width: auto;
-    max-width: 250px;
+    max-width: 270px;
     min-width: 160px;
     min-height: 100px;
     background-color: $color-white;
@@ -59,22 +59,14 @@ mark {
       margin-right: 25px !important;
     }
   }
-  // &__save-button {
-  //   font-size: 15px;
-  //   text-transform: uppercase;
-  //   font-weight: 600;
-  //   cursor: pointer;
-  //   background-color: $color-green;
-  //   border-radius: $border-radius;
-  //   color: $color-white;
-  //   display: inline-block;
-  //   @include box-shadow-1;
-  //   margin-left: auto;
-  //   position: absolute;
-  //   bottom: 14px;
-  //   right: 14px;
-  //   padding: 4px 6px;
-  // }
+  &__error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      color: $color-green;
+    }
+  }
   &__new-card--translation {
     font-size: 17px;
     display: inline-block;
@@ -87,6 +79,7 @@ mark {
     margin: 4px;
     position: relative;
     user-select: none;
+    color: $color-grey-dark-1 !important;
     &:hover {
       background-color: $color-green;
       // transform: scale(1.05);
@@ -150,6 +143,7 @@ mark {
     border: 1px solid $color-grey-dark-1;
     box-sizing: border-box;
     border-radius: $border-radius;
+    color: $color-grey-dark-1;
     &--active {
       display: flex;
       z-index: 1000;
@@ -185,15 +179,21 @@ mark {
       top: -15px;
     }
     span {
-      color: $color-green;
+      color: $color-green !important;
     }
   }
-  &__original-word--audio {
+  &__volume-icon {
     cursor: pointer;
     position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 20px;
+    top: 10px;
+    right: 10px;
+    width: 22px;
+    &--new {
+      justify-self: flex-end;
+      margin-left: auto;
+      cursor: pointer;
+      width: 22px;
+    }
   }
   &__translations-container {
     display: flex;
@@ -202,7 +202,7 @@ mark {
     flex: 1;
     padding: 14px 12px;
     text-align: center;
-    color: $color-grey-dark-1 !important;
+    color: $color-grey-dark-1;
   }
 
   &__rating-buttons {

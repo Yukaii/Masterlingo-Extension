@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import textToSpeech from './responsiveVoice';
 
 class TranslationBox {
   constructor(flashcards) {
@@ -15,6 +16,8 @@ class TranslationBox {
 
   initiate() {
     const volumeIconSrc = chrome.extension.getURL('assets/volume.svg');
+    console.log(volumeIconSrc);
+    console.log('initiating');
     const rateButtons = [
       { name: 'incorrect', quality: 1 },
       { name: 'correct', quality: 4 },
@@ -28,7 +31,7 @@ class TranslationBox {
       })
       .join('');
 
-    this.domSelector.innerHTML = `<img src="${volumeIconSrc}" class="masterlingo__original-word--audio" /><div class="masterlingo__translations-container"></div><div class="masterlingo__rating-buttons">${rateButtonsHtml}</div>`;
+    this.domSelector.innerHTML = `<img src="${volumeIconSrc}" class="masterlingo__volume-icon" /><div class="masterlingo__translations-container"></div><div class="masterlingo__rating-buttons">${rateButtonsHtml}</div>`;
     this.translationsDomSelector = document.querySelector('.masterlingo__translations-container');
     this.ratingsDomSelector = document.querySelector('.masterlingo__rating-buttons');
   }
@@ -39,6 +42,7 @@ class TranslationBox {
     if (!flashcard) return;
     this.domSelector.classList.add(this.activeClass);
     const translations = flashcard.inverted ? flashcard.original.join(', ') : flashcard.translations.join(', ');
+    const original = !flashcard.inverted ? flashcard.original.join(', ') : flashcard.translations.join(', ');
     let fontSize = 26;
     if (translations.length < 8) {
       fontSize = 32;
@@ -56,6 +60,10 @@ class TranslationBox {
     this.translationsDomSelector.textContent = translations;
     this.setPosition(wordElement);
     this.currentFlashcard = flashcard;
+    textToSpeech(original, flashcard.originalLanguage);
+    document.querySelector('.masterlingo__volume-icon').addEventListener('click', () => {
+      textToSpeech(original, flashcard.originalLanguage);
+    });
   }
 
   hide() {

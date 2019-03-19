@@ -3,6 +3,13 @@ import NewCardBox from './NewCardBox';
 import supermemo from './supermemo';
 import axios from 'axios';
 import _ from 'lodash';
+/*
+ ResponsiveVoice JS v1.5.14
+
+ (c) 2015-2019 LearnBrite
+
+ License: http://responsivevoice.org/license
+*/
 
 function runContentScript() {
   let config = { native: '', foreign: '', loggedIn: false },
@@ -10,7 +17,6 @@ function runContentScript() {
     flashcards,
     translationBox,
     newCardBox;
-
   const spanCode = '-198987';
 
   const readyStateCheckInterval = setInterval(function() {
@@ -31,12 +37,14 @@ function runContentScript() {
       });
     }
   }, 10);
-
   async function init() {
     getFlashcards(highlightPageWords);
     translationBox = new TranslationBox();
     newCardBox = new NewCardBox();
     addEventListeners();
+    // let my_awesome_script = document.createElement('script');
+    // my_awesome_script.setAttribute('src', 'https://code.responsivevoice.org/responsivevoice.js');
+    // document.head.appendChild(my_awesome_script);
   }
 
   function getFlashcards() {
@@ -224,7 +232,7 @@ function runContentScript() {
     newCardBox.domSelector.addEventListener('click', e => {
       if (newCardBox.stage === 'button') {
         console.log('clicked button');
-        newCardBox.showTranslations();
+        newCardBox.showTranslations(config.foreign);
       }
     });
   }

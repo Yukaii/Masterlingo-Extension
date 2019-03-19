@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import axios from 'axios';
+import textToSpeech from './responsiveVoice';
 
 class newCardBox {
   constructor() {
@@ -13,9 +14,8 @@ class newCardBox {
   }
 
   showButton(selection) {
+    console.log([selection.toString().trim()]);
     let wordElement = selection.getRangeAt(0);
-    console.log(wordElement);
-
     if (!this.domSelector.contains(wordElement.commonAncestorContainer)) {
       console.log(wordElement);
       this.domSelector.classList.remove('masterlingo__new-card--translations');
@@ -23,52 +23,66 @@ class newCardBox {
       this.domSelector.classList.add('masterlingo__new-card-box--active');
       this.setPosition(wordElement);
       this.domSelector.innerHTML = `M<span>L</span>`;
-      this.term = selection.toString();
+      this.term = selection.toString().trim();
+      console.log('THIS IS THE TERM');
+      console.log(this.term);
       this.stage = 'button';
     }
   }
 
-  async showTranslations() {
+  async showTranslations(foreign) {
+    console.log('STARTING TRANSLATIONS');
     let translationsHTML;
     this.stage = 'translations';
+    this.domSelector.textContent = '';
     this.domSelector.classList.replace('masterlingo__new-card--button', 'masterlingo__new-card--translations');
     const { data } = await axios.get(`https://masterlingoapp.com/api/translate/${this.term}`, {
       headers: {
         inverted: false
       }
     });
-    if (data.translations) {
+    if (data.translations && !data.error) {
+      console.log(data);
       translationsHTML = data.translations.slice(0, 6).map(translation => {
         return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
       });
-    }
-    const volumeIconSrc = chrome.extension.getURL('assets/volume.svg');
-    this.domSelector.innerHTML = `<div class="masterlingo__new-card--container"><div class="masterlingo__new-card--header"><div class="masterlingo__new-card--term" >${
-      this.term
-    }</div>
-    <div class="masterlingo__new-card--pos" >${data.partOfSpeech[0].toLowerCase()}</div><img src="${volumeIconSrc}" class="masterlingo__new-card--audio" /></div>${translationsHTML.join(
-      ''
-    )}</div>`;
-    console.log(data);
-    Array.from(document.getElementsByClassName('masterlingo__new-card--translation')).forEach(translationEl => {
-      translationEl.addEventListener('click', () => {
-        if (translationEl.classList.contains('saved-translation')) {
-          this.translationsToSave.splice(this.translationsToSave.indexOf(translationEl.textContent), 1);
-          translationEl.classList.remove('saved-translation');
-        } else if (this.translationsToSave.length < 4) {
-          this.translationsToSave.push(translationEl.textContent);
-          translationEl.classList.add('saved-translation');
-        } else {
-          alert(`You cannot save more than 4 translations at once, sorry :()`);
-        }
+      const volumeIconSrc = chrome.extension.getURL('assets/volume.svg');
+      this.domSelector.innerHTML = `<div class="masterlingo__new-card--container"><div class="masterlingo__new-card--header"><div class="masterlingo__new-card--term" >${
+        this.term
+      }</div>
+      <div class="masterlingo__new-card--pos" >${
+        data.partOfSpeech[0] ? data.partOfSpeech[0].toLowerCase() : ''
+      }</div><img src="${volumeIconSrc}" class="masterlingo__volume-icon--new" /></div>${translationsHTML.join(
+        ''
+      )}</div>`;
+      textToSpeech(this.term, foreign);
+      Array.from(document.getElementsByClassName('masterlingo__new-card--translation')).forEach(translationEl => {
+        translationEl.addEventListener('click', () => {
+          if (translationEl.classList.contains('saved-translation')) {
+            this.translationsToSave.splice(this.translationsToSave.indexOf(translationEl.textContent), 1);
+            translationEl.classList.remove('saved-translation');
+          } else if (this.translationsToSave.length < 4) {
+            this.translationsToSave.push(translationEl.textContent);
+            translationEl.classList.add('saved-translation');
+          } else {
+            alert(`You cannot save more than 4 translations at once, sorry :(`);
+          }
+        });
       });
-    });
+      document.querySelector('.masterlingo__volume-icon--new').addEventListener('click', () => {
+        textToSpeech(this.term, foreign);
+      });
+    } else {
+      this.domSelector.innerHTML = `No translations found, sorry.`;
+      this.domSelector.classList.add('masterlingo__error');
+    }
   }
 
   async hide() {
     this.stage = 'hidden';
     this.domSelector.classList.remove('masterlingo__new-card--button');
     this.domSelector.classList.remove('masterlingo__new-card-box--active');
+    this.domSelector.classList.remove('masterlingo__error');
     this.translationsToSave = [];
     this.term = '';
   }
