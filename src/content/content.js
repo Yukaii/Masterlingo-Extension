@@ -30,7 +30,7 @@ function runContentScript() {
         if (response) {
           console.log(response);
           config = { ...config, foreign: response.foreign, native: response.native, loggedIn: true };
-          pageElements = document.querySelectorAll('p, span');
+          pageElements = document.querySelectorAll('p');
           init();
           console.log(flashcards);
         }
@@ -42,9 +42,6 @@ function runContentScript() {
     translationBox = new TranslationBox();
     newCardBox = new NewCardBox();
     addEventListeners();
-    // let my_awesome_script = document.createElement('script');
-    // my_awesome_script.setAttribute('src', 'https://code.responsivevoice.org/responsivevoice.js');
-    // document.head.appendChild(my_awesome_script);
   }
 
   function getFlashcards() {
@@ -127,15 +124,15 @@ function runContentScript() {
       }
     });
 
-    function updateBgFlashcards() {
-      chrome.runtime.sendMessage({ method: 'put', function: 'flashcards', payload: flashcards }, response => {
-        console.log(response);
+    function updateBgFlashcards(method, flashcard) {
+      chrome.runtime.sendMessage({ method, function: 'flashcard', payload: flashcard }, response => {
+        console.log('bg said' + response);
       });
     }
 
     function updateHighlightedWords(method, flashcard) {
       switch (method) {
-        case 'remove':
+        case 'delete':
           let highlightedWords = document.getElementsByClassName('masterlingo__marked-word');
           Array.from(highlightedWords).forEach(element => {
             if (element.dataset.flashcardid === flashcard._id) {
@@ -161,10 +158,12 @@ function runContentScript() {
           const quality = e.target.id.split('-')[1];
           const supermemoResults = supermemo(quality, translationBox.currentFlashcard);
           console.log(flashcards);
+          let method = 'delete';
           if (quality > 3) {
-            updateHighlightedWords('remove', translationBox.currentFlashcard);
+            updateHighlightedWords('delete', translationBox.currentFlashcard);
             flashcards.allFlashcards = _.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
           } else {
+            method = 'put';
             flashcards.allFlashcards[translationBox.currentFlashcard._id] = {
               ...translationBox.currentFlashcard,
               ..._.omit(supermemoResults, 'isRepeatAgain'),
@@ -172,8 +171,10 @@ function runContentScript() {
             };
             console.log(flashcards.allFlashcards._id);
           }
+          console.log('this is the current flashcard');
+          console.log(translationBox.currentFlashcard);
+          updateBgFlashcards(method, translationBox.currentFlashcard);
           console.log('UPDATING BG FLASHCARDS');
-          updateBgFlashcards();
           const response = await axios.put(
             `https://masterlingoapp.com/api/srs/${translationBox.currentFlashcard._id}`,
             _.omit(supermemoResults, 'isRepeatAgain')
@@ -186,8 +187,7 @@ function runContentScript() {
     function handleClickOutside(e) {
       console.log('handleClick outside');
       const isNotClickInside = !newCardBox.domSelector.contains(e.target);
-      if (isNotClickInside && window.getSelection().toString.length < 1) {
-        console.log('hiding from content');
+      if (isNotClickInside && window.getSelection().toString.length < 1 && e.target.textContent !== 'L') {
         document.removeEventListener('click', handleClickOutside);
         if (newCardBox.translationsToSave.length > 0) {
           const translations = newCardBox.translationsToSave,
@@ -213,7 +213,7 @@ function runContentScript() {
               updateHighlightedWords('add', flashcard);
               flashcards.allFlashcards[response.data[0]] = flashcard;
               console.log(flashcards);
-              updateBgFlashcards();
+              updateBgFlashcards('post', flashcard);
             });
         }
         newCardBox.hide();
@@ -233,6 +233,24 @@ function runContentScript() {
       if (newCardBox.stage === 'button') {
         console.log('clicked button');
         newCardBox.showTranslations(config.foreign);
+      }
+    });
+    document.querySelector('.masterlingo__delete-icon').addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete this card?')) {
+        console.log('removing');
+        updateHighlightedWords('delete', translationBox.currentFlashcard);
+        flashcards.allFlashcards = _.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
+        updateBgFlashcards('delete', translationBox.currentFlashcard);
+        translationBox.hide();
+        axios
+          .delete(`https://masterlingoapp.com/api/flashcards/${translationBox.currentFlashcard._id}`)
+          .then(result => {
+            console.log('db record deleted successfully');
+            console.log(result);
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     });
   }

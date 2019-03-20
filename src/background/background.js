@@ -1,5 +1,6 @@
 import Flashcards from './Flashcards';
 import mslApi from './msLingoApi';
+import _ from 'lodash';
 
 let config = {
     loggedIn: false,
@@ -25,7 +26,7 @@ async function init() {
 function addListeners() {
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log('bg script got message');
-
+    console.log(request);
     switch (request.method) {
       case 'get':
         switch (request.function) {
@@ -38,23 +39,46 @@ function addListeners() {
             sendResponse({ ...flashcards });
             break;
           default:
+            sendResponse('invalid function');
             break;
         }
         break;
       case 'put':
         switch (request.function) {
-          case 'flashcards':
-            console.log('updating flashcards bg script');
-            console.log('REQUEST IS:');
-            console.log(request);
-            flashcards = request.payload;
-            console.log(flashcards);
+          case 'flashcard':
+            flashcards.allFlashcards[request.payload._id] = request.payload;
             sendResponse('success');
             break;
           default:
+            sendResponse('invalid function');
             break;
         }
         break;
+      case 'delete':
+        switch (request.function) {
+          case 'flashcard':
+            console.log('about to delete a flashcard');
+            console.log(flashcards.allFlashcards);
+            flashcards.allFlashcards = _.omit(flashcards.allFlashcards, request.payload._id);
+            console.log(flashcards.allFlashcards);
+            sendResponse('success');
+          default:
+            sendResponse('invalid function');
+            break;
+        }
+        break;
+      case 'post':
+        switch (request.function) {
+          case 'flashcard':
+            flashcards.allFlashcards[request.payload._id] = request.payload;
+            sendResponse('success');
+          default:
+            sendResponse('invalid function');
+            break;
+        }
+        break;
+      default:
+        sendResponse('invalid method');
     }
   });
 }

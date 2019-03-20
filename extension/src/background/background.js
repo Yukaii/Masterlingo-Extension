@@ -19218,6 +19218,9 @@ class Flashcards {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Flashcards__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Flashcards */ "./src/background/Flashcards.js");
 /* harmony import */ var _msLingoApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./msLingoApi */ "./src/background/msLingoApi.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 
@@ -19245,7 +19248,7 @@ async function init() {
 function addListeners() {
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log('bg script got message');
-
+    console.log(request);
     switch (request.method) {
       case 'get':
         switch (request.function) {
@@ -19258,23 +19261,46 @@ function addListeners() {
             sendResponse({ ...flashcards });
             break;
           default:
+            sendResponse('invalid function');
             break;
         }
         break;
       case 'put':
         switch (request.function) {
-          case 'flashcards':
-            console.log('updating flashcards bg script');
-            console.log('REQUEST IS:');
-            console.log(request);
-            flashcards = request.payload;
-            console.log(flashcards);
+          case 'flashcard':
+            flashcards.allFlashcards[request.payload._id] = request.payload;
             sendResponse('success');
             break;
           default:
+            sendResponse('invalid function');
             break;
         }
         break;
+      case 'delete':
+        switch (request.function) {
+          case 'flashcard':
+            console.log('about to delete a flashcard');
+            console.log(flashcards.allFlashcards);
+            flashcards.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.omit(flashcards.allFlashcards, request.payload._id);
+            console.log(flashcards.allFlashcards);
+            sendResponse('success');
+          default:
+            sendResponse('invalid function');
+            break;
+        }
+        break;
+      case 'post':
+        switch (request.function) {
+          case 'flashcard':
+            flashcards.allFlashcards[request.payload._id] = request.payload;
+            sendResponse('success');
+          default:
+            sendResponse('invalid function');
+            break;
+        }
+        break;
+      default:
+        sendResponse('invalid method');
     }
   });
 }

@@ -63,6 +63,8 @@ mark {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 15px;
+    font-size: 15px;
     span {
       color: $color-green;
     }
@@ -183,16 +185,35 @@ mark {
     }
   }
   &__volume-icon {
-    cursor: pointer;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 22px;
+    top: 7px;
+    right: 7px;
+
     &--new {
       justify-self: flex-end;
       margin-left: auto;
+    }
+    &,
+    &--new {
+      color: $color-grey-light-3;
+      font-size: 25px !important;
       cursor: pointer;
-      width: 22px;
+      &:hover {
+        color: $color-green;
+      }
+    }
+  }
+
+  &__delete-icon {
+    position: absolute;
+    left: 7px;
+    top: 9px;
+    color: $color-grey-light-2;
+    font-size: 21px !important;
+    cursor: pointer;
+    transition: color 0.5s ease;
+    &:hover {
+      color: $color-grey-light-3;
     }
   }
   &__translations-container {
@@ -200,7 +221,7 @@ mark {
     justify-content: center;
     align-items: center;
     flex: 1;
-    padding: 14px 12px;
+    padding: 22px 12px 14px 12px;
     text-align: center;
     color: $color-grey-dark-1;
   }

@@ -30,8 +30,7 @@ class TranslationBox {
         }">${rateButton.name}</div>`;
       })
       .join('');
-
-    this.domSelector.innerHTML = `<img src="${volumeIconSrc}" class="masterlingo__volume-icon" /><div class="masterlingo__translations-container"></div><div class="masterlingo__rating-buttons">${rateButtonsHtml}</div>`;
+    this.domSelector.innerHTML = `<i class="material-icons masterlingo__volume-icon">volume_up</i><i class="material-icons masterlingo__delete-icon">delete</i><div class="masterlingo__translations-container"></div><div class="masterlingo__rating-buttons">${rateButtonsHtml}</div>`;
     this.translationsDomSelector = document.querySelector('.masterlingo__translations-container');
     this.ratingsDomSelector = document.querySelector('.masterlingo__rating-buttons');
   }

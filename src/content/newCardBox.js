@@ -41,7 +41,7 @@ class newCardBox {
         inverted: false
       }
     });
-    if (data.translations && !data.errorg) {
+    if (data.translations && !data.error && data.invertable) {
       console.log(data);
       translationsHTML = data.translations.slice(0, 6).map(translation => {
         return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
@@ -52,7 +52,7 @@ class newCardBox {
       }</div>
       <div class="masterlingo__new-card--pos" >${
         data.partOfSpeech[0] ? data.partOfSpeech[0].toLowerCase() : ''
-      }</div><img src="${volumeIconSrc}" class="masterlingo__volume-icon--new" /></div>${translationsHTML.join(
+      }</div><i class="material-icons masterlingo__volume-icon--new">volume_up</i></div>${translationsHTML.join(
         ''
       )}</div>`;
       textToSpeech(this.term, foreign);
@@ -91,7 +91,7 @@ class newCardBox {
     const wordOffset = this.getOffset(wordElement);
     console.log(wordElement);
     this.domSelector.style.left = wordOffset.left + wordOffset.width / 2 + 'px';
-    this.domSelector.style.top = wordOffset.top - 15 + 'px';
+    this.domSelector.style.top = wordOffset.top - 10 + 'px';
   }
 
   getOffset(element) {
