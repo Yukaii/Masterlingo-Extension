@@ -1,3 +1,29 @@
+.masterlingo__spinner {
+  animation: rotator 1.4s linear infinite; }
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(270deg); } }
+
+.path {
+  stroke-dasharray: 187;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation: dash 1.4s ease-in-out infinite;
+  stroke: #013e87; }
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 187; }
+  50% {
+    stroke-dashoffset: 46.75;
+    transform: rotate(135deg); }
+  100% {
+    stroke-dashoffset: 187;
+    transform: rotate(450deg); } }
+
 @font-face {
   font-family: 'Proxima Nova';
   src: url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNovaT-Thin.woff2") format("woff2"), url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNovaT-Thin.woff") format("woff");
@@ -90,7 +116,9 @@ mark {
 
 .masterlingo__translation-box {
   flex-direction: column;
-  color: #000; }
+  color: #000;
+  font-family: 'Proxima Nova';
+  position: relative; }
 
 .masterlingo__new-card--translations {
   width: auto;
@@ -98,7 +126,8 @@ mark {
   min-width: 160px;
   min-height: 100px;
   background-color: #fff;
-  width: max-content; }
+  width: max-content;
+  font-family: 'Proxima Nova'; }
 
 .masterlingo__new-card--header {
   display: flex;
@@ -106,14 +135,17 @@ mark {
   align-items: baseline;
   margin-bottom: 5px;
   padding-bottom: 5px;
-  border-bottom: 2px solid #f7f7f7; }
+  border-bottom: 2px solid #f7f7f7;
+  font-family: 'Proxima Nova'; }
 
 .masterlingo__new-card--term {
   font-size: 25px;
   margin-right: 8px;
-  font-weight: 500; }
+  font-weight: 500;
+  font-family: 'Proxima Nova'; }
 
 .masterlingo__new-card--pos {
+  font-family: 'Proxima Nova';
   font-style: italic;
   color: #ccc;
   margin-right: 10px;
@@ -137,11 +169,13 @@ mark {
   justify-content: center;
   align-items: center;
   padding: 15px;
-  font-size: 15px; }
+  font-size: 15px;
+  font-family: 'Proxima Nova'; }
   .masterlingo__error span {
     color: #25dea0; }
 
 .masterlingo__new-card--translation {
+  font-family: 'Proxima Nova';
   font-size: 17px;
   display: inline-block;
   border-radius: 4px;
@@ -196,7 +230,6 @@ mark {
     top: 100%; }
 
 .masterlingo__translation-box, .masterlingo__new-card-box, .masterlingo__new-card--button {
-  font-family: 'Proxima Nova' !important;
   position: absolute;
   display: none;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -228,7 +261,8 @@ mark {
   color: #fe8f76;
   cursor: pointer;
   transform: translate(-50%, 100%);
-  transition: background-color 0.3s; }
+  transition: background-color 0.3s;
+  font-family: 'Proxima Nova'; }
   .masterlingo__new-card--button:hover {
     background-color: #014aa0; }
   .masterlingo__new-card--button::after {
@@ -243,13 +277,19 @@ mark {
   right: 7px; }
   .masterlingo__volume-icon--new {
     justify-self: flex-end;
-    margin-left: auto; }
+    margin-left: auto;
+    transform: translateY(5px); }
   .masterlingo__volume-icon, .masterlingo__volume-icon--new {
     color: #ccc;
     font-size: 25px !important;
     cursor: pointer; }
     .masterlingo__volume-icon:hover, .masterlingo__volume-icon--new:hover {
       color: #25dea0; }
+
+.masterlingo__new-card-box {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
 
 .masterlingo__delete-icon {
   position: absolute;
@@ -267,7 +307,7 @@ mark {
   justify-content: center;
   align-items: center;
   flex: 1;
-  padding: 22px 12px 14px 12px;
+  padding: 30px 12px 14px 12px;
   text-align: center;
   color: #444; }
 

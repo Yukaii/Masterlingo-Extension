@@ -15,6 +15,8 @@ mark {
   &__translation-box {
     flex-direction: column;
     color: $color-black;
+    font-family: 'Proxima Nova';
+    position: relative;
   }
   &__new-card--translations {
     width: auto;
@@ -23,6 +25,7 @@ mark {
     min-height: 100px;
     background-color: $color-white;
     width: max-content;
+    font-family: 'Proxima Nova';
   }
   &__new-card--header {
     display: flex;
@@ -31,13 +34,16 @@ mark {
     margin-bottom: 5px;
     padding-bottom: 5px;
     border-bottom: 2px solid $color-grey-light-1;
+    font-family: 'Proxima Nova';
   }
   &__new-card--term {
     font-size: 25px;
     margin-right: 8px;
     font-weight: 500;
+    font-family: 'Proxima Nova';
   }
   &__new-card--pos {
+    font-family: 'Proxima Nova';
     font-style: italic;
     color: $color-grey-light-3;
     margin-right: 10px;
@@ -65,11 +71,13 @@ mark {
     align-items: center;
     padding: 15px;
     font-size: 15px;
+    font-family: 'Proxima Nova';
     span {
       color: $color-green;
     }
   }
   &__new-card--translation {
+    font-family: 'Proxima Nova';
     font-size: 17px;
     display: inline-block;
     border-radius: $border-radius;
@@ -138,7 +146,6 @@ mark {
   &__translation-box,
   &__new-card-box,
   &__new-card--button {
-    font-family: 'Proxima Nova' !important;
     position: absolute;
     display: none;
     @include box-shadow-1;
@@ -173,6 +180,7 @@ mark {
     cursor: pointer;
     transform: translate(-50%, 100%);
     transition: background-color 0.3s;
+    font-family: 'Proxima Nova';
     &:hover {
       background-color: lighten($color-blue, 5);
     }
@@ -192,6 +200,7 @@ mark {
     &--new {
       justify-self: flex-end;
       margin-left: auto;
+      transform: translateY(5px);
     }
     &,
     &--new {
@@ -203,7 +212,11 @@ mark {
       }
     }
   }
-
+  &__new-card-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   &__delete-icon {
     position: absolute;
     left: 7px;
@@ -221,7 +234,7 @@ mark {
     justify-content: center;
     align-items: center;
     flex: 1;
-    padding: 22px 12px 14px 12px;
+    padding: 30px 12px 14px 12px;
     text-align: center;
     color: $color-grey-dark-1;
   }

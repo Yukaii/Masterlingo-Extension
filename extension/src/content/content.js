@@ -19250,9 +19250,9 @@ class newCardBox {
     let wordElement = selection.getRangeAt(0);
     if (!this.domSelector.contains(wordElement.commonAncestorContainer)) {
       console.log(wordElement);
+      this.domSelector.style.display = 'flex';
       this.domSelector.classList.remove('masterlingo__new-card--translations');
       this.domSelector.classList.add('masterlingo__new-card--button');
-      this.domSelector.classList.add('masterlingo__new-card-box--active');
       this.setPosition(wordElement);
       this.domSelector.innerHTML = `M<span>L</span>`;
       this.term = selection.toString().trim();
@@ -19266,7 +19266,8 @@ class newCardBox {
     console.log('STARTING TRANSLATIONS');
     let translationsHTML;
     this.stage = 'translations';
-    this.domSelector.textContent = '';
+    this.domSelector.innerHTML = `<svg class="masterlingo__spinner" width="30px" height="30px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+     </svg>`;
     this.domSelector.classList.replace('masterlingo__new-card--button', 'masterlingo__new-card--translations');
     const { data } = await axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(`https://masterlingoapp.com/api/translate/${this.term}`, {
       headers: {
@@ -19278,7 +19279,6 @@ class newCardBox {
       translationsHTML = data.translations.slice(0, 6).map(translation => {
         return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
       });
-      const volumeIconSrc = chrome.extension.getURL('assets/volume.svg');
       this.domSelector.innerHTML = `<div class="masterlingo__new-card--container"><div class="masterlingo__new-card--header"><div class="masterlingo__new-card--term" >${
         this.term
       }</div>
@@ -19313,8 +19313,8 @@ class newCardBox {
   async hide() {
     this.stage = 'hidden';
     this.domSelector.classList.remove('masterlingo__new-card--button');
-    this.domSelector.classList.remove('masterlingo__new-card-box--active');
     this.domSelector.classList.remove('masterlingo__error');
+    this.domSelector.style.display = 'none';
     this.translationsToSave = [];
     this.term = '';
   }
