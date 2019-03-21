@@ -3,6 +3,7 @@ $duration: 1.4s;
 
 .masterlingo__spinner {
   animation: rotator $duration linear infinite;
+  width: 30px !important;
 }
 
 @keyframes rotator {

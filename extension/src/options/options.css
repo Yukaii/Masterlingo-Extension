@@ -1,0 +1,159 @@
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-left: 10px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+
+input:checked + .slider {
+  background-color: #25dea0;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #25dea0;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+  transform: scale(0.8);
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+* {
+  font-size: 20px;
+  font-family: 'Proxima Nova';
+}
+
+main {
+  width: max-content;
+  margin: 100px auto;
+}
+
+body {
+  background-color: white;
+}
+h1 {
+  text-align: center;
+  font-size: 35px;
+}
+.switch-toggle {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 15px 0;
+}
+
+select {
+  margin-left: 15px;
+  border-radius: 4px;
+  background-color: #ccc;
+  border: none;
+  padding: 3px;
+  background-color: #aaf2da;
+}
+
+.elements {
+  position: relative;
+}
+
+#warning {
+  position: absolute;
+  top: 50%;
+  left: 102%;
+  transform: translateY(-40%);
+  cursor: pointer;
+  color: #ccc;
+  transition: all 0.3s ease;
+  font-size: 20px !important;
+  color: #fe8f76;
+  user-select: none;
+  display: none;
+}
+
+#warning:hover {
+  color: #fe8f76;
+}
+#warning:hover > div {
+  opacity: 1;
+}
+
+.tooltip {
+  font-size: 15px;
+  background-color: #eee;
+  color: black;
+  position: absolute;
+  bottom: 110%;
+  left: 0;
+  width: max-content;
+  transform: translateX(-5%);
+  border-radius: 4px;
+  padding: 6px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  z-index: 10000;
+  transition: all 0.4s ease;
+}
+
+.save-button__container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.save-button {
+  font-size: 16px;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  width: max-content;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #25dea0;
+  color: white;
+  border: none;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  user-select: none;
+  display: none;
+}

@@ -59,6 +59,7 @@ class TranslationBox {
     this.translationsDomSelector.textContent = translations;
     this.setPosition(wordElement);
     this.currentFlashcard = flashcard;
+    console.log(flashcard);
     textToSpeech(original, flashcard.originalLanguage);
     document.querySelector('.masterlingo__volume-icon').addEventListener('click', () => {
       textToSpeech(original, flashcard.originalLanguage);
@@ -71,16 +72,17 @@ class TranslationBox {
 
   setPosition(wordElement) {
     const wordOffset = this.getOffset(wordElement);
-    this.domSelector.style.left = wordOffset.left + wordElement.offsetWidth / 2 + 'px';
+    const elWidth = wordElement.offsetWidth || wordOffset.width;
+    this.domSelector.style.left = wordOffset.left + elWidth / 2 + 'px';
     this.domSelector.style.top = wordOffset.top - 15 + 'px';
-    const boxOffset = this.getOffset(this.domSelector);
   }
 
   getOffset(element) {
     const rect = element.getBoundingClientRect();
     return {
       left: rect.left + window.scrollX,
-      top: rect.top + window.scrollY
+      top: rect.top + window.scrollY,
+      width: rect.width
     };
   }
 }

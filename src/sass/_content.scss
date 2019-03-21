@@ -156,6 +156,10 @@ mark {
     &--active {
       display: flex;
       z-index: 1000;
+      &::after {
+        opacity: 1 !important;
+        z-index: 1000;
+      }
     }
     &::after {
       content: '';
@@ -165,6 +169,7 @@ mark {
       height: 15px;
       width: 20px;
       background-color: #666;
+      opacity: 0;
     }
   }
   &__new-card--button {
@@ -196,7 +201,6 @@ mark {
     position: absolute;
     top: 7px;
     right: 7px;
-
     &--new {
       justify-self: flex-end;
       margin-left: auto;
@@ -206,6 +210,7 @@ mark {
     &--new {
       color: $color-grey-light-3;
       font-size: 25px !important;
+      user-select: none !important;
       cursor: pointer;
       &:hover {
         color: $color-green;
@@ -224,6 +229,7 @@ mark {
     color: $color-grey-light-2;
     font-size: 21px !important;
     cursor: pointer;
+    user-select: none !important;
     transition: color 0.5s ease;
     &:hover {
       color: $color-grey-light-3;

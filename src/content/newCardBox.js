@@ -11,6 +11,7 @@ class newCardBox {
     this.stage = 'hidden';
     this.term = '';
     this.translationsToSave = [];
+    this.wordElement = null;
   }
 
   showButton(selection) {
@@ -18,9 +19,11 @@ class newCardBox {
     let wordElement = selection.getRangeAt(0);
     if (!this.domSelector.contains(wordElement.commonAncestorContainer)) {
       console.log(wordElement);
+      this.wordElement = wordElement;
       this.domSelector.style.display = 'flex';
       this.domSelector.classList.remove('masterlingo__new-card--translations');
       this.domSelector.classList.add('masterlingo__new-card--button');
+      this.domSelector.classList.add('masterlingo__new-card-box--active');
       this.setPosition(wordElement);
       this.domSelector.innerHTML = `M<span>L</span>`;
       this.term = selection.toString().trim();
@@ -33,6 +36,7 @@ class newCardBox {
   async showTranslations(foreign) {
     console.log('STARTING TRANSLATIONS');
     let translationsHTML;
+
     this.stage = 'translations';
     this.domSelector.innerHTML = `<svg class="masterlingo__spinner" width="30px" height="30px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
      </svg>`;
@@ -82,8 +86,10 @@ class newCardBox {
     this.stage = 'hidden';
     this.domSelector.classList.remove('masterlingo__new-card--button');
     this.domSelector.classList.remove('masterlingo__error');
+    this.domSelector.classList.remove('masterlingo__new-card-box--active');
     this.domSelector.style.display = 'none';
     this.translationsToSave = [];
+    this.wordElement = null;
     this.term = '';
   }
 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="options.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <title>Document</title>
+  </head>
+  <body>
+    <main>
+    <h1>Settings</h1>
+    <form>
+    <div class="auto-audio"><div class="switch-toggle">
+      Auto text-to-speech: 
+      <label class="switch" name="text-to-speech">
+        <input type="checkbox" id="autoAudio" />
+        <span class="slider round" />
+      </label>
+    </div></div>
+    <div class="all-pages">
+      <div class="switch-toggle">
+        Extension active on:
+        <select id="activePages" >
+            <option value="all">
+               All pages
+            </option>
+            <option value="targetLanguage">
+              Pages in English
+            </option>
+          </select>
+      </div>
+      <div class="elements">
+          <div class="switch-toggle">
+            Highlight words in:
+            <select id="highlightElements" >
+                <option value="paragraphs">
+                  Paragraphs only
+                </option>
+                <option value="all">
+                  All elements
+                </option>
+              </select>
+              <i class="material-icons " id="warning">warning
+                <div class="tooltip">This is an experimental feature and might break certain pages</div>
+              </i>
+          </div>
+    </div>
+    <div class="change-language">You can change language settings <a href="https://masterlingoapp.com/settings"> here</a></div>
+    <div class="save-button__container" ><div class="save-button" id="save">Save changes</div></div>
+  </form>
+    </main>
+  </body>
+  <script src="options.js"> </script>
+  </html>

@@ -19243,6 +19243,7 @@ class newCardBox {
     this.stage = 'hidden';
     this.term = '';
     this.translationsToSave = [];
+    this.wordElement = null;
   }
 
   showButton(selection) {
@@ -19250,9 +19251,11 @@ class newCardBox {
     let wordElement = selection.getRangeAt(0);
     if (!this.domSelector.contains(wordElement.commonAncestorContainer)) {
       console.log(wordElement);
+      this.wordElement = wordElement;
       this.domSelector.style.display = 'flex';
       this.domSelector.classList.remove('masterlingo__new-card--translations');
       this.domSelector.classList.add('masterlingo__new-card--button');
+      this.domSelector.classList.add('masterlingo__new-card-box--active');
       this.setPosition(wordElement);
       this.domSelector.innerHTML = `M<span>L</span>`;
       this.term = selection.toString().trim();
@@ -19265,6 +19268,7 @@ class newCardBox {
   async showTranslations(foreign) {
     console.log('STARTING TRANSLATIONS');
     let translationsHTML;
+
     this.stage = 'translations';
     this.domSelector.innerHTML = `<svg class="masterlingo__spinner" width="30px" height="30px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
      </svg>`;
@@ -19314,8 +19318,10 @@ class newCardBox {
     this.stage = 'hidden';
     this.domSelector.classList.remove('masterlingo__new-card--button');
     this.domSelector.classList.remove('masterlingo__error');
+    this.domSelector.classList.remove('masterlingo__new-card-box--active');
     this.domSelector.style.display = 'none';
     this.translationsToSave = [];
+    this.wordElement = null;
     this.term = '';
   }
 
@@ -19415,6 +19421,7 @@ class TranslationBox {
     this.translationsDomSelector.textContent = translations;
     this.setPosition(wordElement);
     this.currentFlashcard = flashcard;
+    console.log(flashcard);
     Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_1__["default"])(original, flashcard.originalLanguage);
     document.querySelector('.masterlingo__volume-icon').addEventListener('click', () => {
       Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_1__["default"])(original, flashcard.originalLanguage);
@@ -19427,16 +19434,17 @@ class TranslationBox {
 
   setPosition(wordElement) {
     const wordOffset = this.getOffset(wordElement);
-    this.domSelector.style.left = wordOffset.left + wordElement.offsetWidth / 2 + 'px';
+    const elWidth = wordElement.offsetWidth || wordOffset.width;
+    this.domSelector.style.left = wordOffset.left + elWidth / 2 + 'px';
     this.domSelector.style.top = wordOffset.top - 15 + 'px';
-    const boxOffset = this.getOffset(this.domSelector);
   }
 
   getOffset(element) {
     const rect = element.getBoundingClientRect();
     return {
       left: rect.left + window.scrollX,
-      top: rect.top + window.scrollY
+      top: rect.top + window.scrollY,
+      width: rect.width
     };
   }
 }
@@ -19515,7 +19523,7 @@ function runContentScript() {
         console.log('response is:');
         console.log(response);
         flashcards = response;
-        highlightPageWords(flashcards.allFlashcards);
+        highlightPageWords(flashcards.reviewFlashcards);
       } else {
         console.log(`couldn't get flashcards`);
       }
@@ -19573,7 +19581,7 @@ function runContentScript() {
   function handleMarkedWordClick(e) {
     const clickedWordEl = e.target;
     const flashcardId = clickedWordEl.dataset.flashcardid;
-    const flashcard = flashcards.allFlashcards[flashcardId];
+    const flashcard = flashcards.reviewFlashcards[flashcardId];
     translationBox.show(clickedWordEl, flashcard);
   }
 
@@ -19625,16 +19633,21 @@ function runContentScript() {
           let method = 'delete';
           if (quality > 3) {
             updateHighlightedWords('delete', translationBox.currentFlashcard);
-            flashcards.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
+            flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(flashcards.reviewFlashcards, translationBox.currentFlashcard._id);
           } else {
             method = 'put';
-            flashcards.allFlashcards[translationBox.currentFlashcard._id] = {
+            flashcards.reviewFlashcards[translationBox.currentFlashcard._id] = {
               ...translationBox.currentFlashcard,
               ...lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(supermemoResults, 'isRepeatAgain'),
               cannotRate: true
             };
-            console.log(flashcards.allFlashcards._id);
+            console.log(flashcards.reviewFlashcards._id);
           }
+          flashcards.allFlashcards[translationBox.currentFlashcard._id] = {
+            ...translationBox.currentFlashcard,
+            ...lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(supermemoResults, 'isRepeatAgain'),
+            cannotRate: true
+          };
           console.log('this is the current flashcard');
           console.log(translationBox.currentFlashcard);
           updateBgFlashcards(method, translationBox.currentFlashcard);
@@ -19672,9 +19685,12 @@ function runContentScript() {
                 schedule: null,
                 factor: null,
                 _id: response.data[0],
-                cannotRate: true
+                cannotRate: true,
+                originalLanguage: config.foreign,
+                translationLanguage: config.native
               };
               updateHighlightedWords('add', flashcard);
+              flashcards.reviewFlashcards[response.data[0]] = flashcard;
               flashcards.allFlashcards[response.data[0]] = flashcard;
               console.log(flashcards);
               updateBgFlashcards('post', flashcard);
@@ -19693,16 +19709,45 @@ function runContentScript() {
         }, 500);
       }
     });
+
+    function checkForExisting(term) {
+      console.log('heree2');
+      let card;
+      Object.values(flashcards.allFlashcards).forEach(flashcard => {
+        let textArray = flashcard.inverted ? flashcard.translations : flashcard.original;
+        console.log(term);
+        let tempCard = flashcard;
+        textArray.forEach(word => {
+          if (word.toLowerCase() === term.toLowerCase()) {
+            card = tempCard;
+          }
+        });
+      });
+      return card;
+    }
     newCardBox.domSelector.addEventListener('click', e => {
       if (newCardBox.stage === 'button') {
         console.log('clicked button');
-        newCardBox.showTranslations(config.foreign);
+        const existingFlashcard = checkForExisting(newCardBox.term);
+        console.log('does card exist?');
+        if (existingFlashcard) {
+          const wordElement = newCardBox.wordElement;
+          newCardBox.hide();
+          translationBox.show(wordElement, {
+            ...existingFlashcard,
+            cannotRate: existingFlashcard.cannotRate || !(new Date(existingFlashcard.dueDate) - new Date() < 0)
+          });
+          e.stopPropagation();
+        } else {
+          newCardBox.showTranslations(config.foreign);
+        }
       }
     });
     document.querySelector('.masterlingo__delete-icon').addEventListener('click', () => {
       if (confirm('Are you sure you want to delete this card?')) {
         console.log('removing');
         updateHighlightedWords('delete', translationBox.currentFlashcard);
+        flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(flashcards.reviewFlashcards, translationBox.currentFlashcard._id);
         flashcards.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
         updateBgFlashcards('delete', translationBox.currentFlashcard);
         translationBox.hide();
@@ -19735,7 +19780,7 @@ runContentScript();
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (function(text, language) {
-  console.log(language);
+  
   responsiveVoice.speak(text, supportedLanguages[language]);
 });
 

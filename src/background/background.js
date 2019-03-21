@@ -46,6 +46,7 @@ function addListeners() {
       case 'put':
         switch (request.function) {
           case 'flashcard':
+            flashcards.reviewFlashcards[request.payload._id] = request.payload;
             flashcards.allFlashcards[request.payload._id] = request.payload;
             sendResponse('success');
             break;
@@ -58,9 +59,10 @@ function addListeners() {
         switch (request.function) {
           case 'flashcard':
             console.log('about to delete a flashcard');
-            console.log(flashcards.allFlashcards);
+            console.log(flashcards.reviewFlashcards);
+            flashcards.reviewFlashcards = _.omit(flashcards.reviewFlashcards, request.payload._id);
             flashcards.allFlashcards = _.omit(flashcards.allFlashcards, request.payload._id);
-            console.log(flashcards.allFlashcards);
+            console.log(flashcards.reviewFlashcards);
             sendResponse('success');
           default:
             sendResponse('invalid function');
@@ -70,7 +72,8 @@ function addListeners() {
       case 'post':
         switch (request.function) {
           case 'flashcard':
-            flashcards.allFlashcards[request.payload._id] = request.payload;
+            flashcards.reviewFlashcards[request.payload._id] = { ...request.payload, cannotRate: false };
+            flashcards.allFlashcards[request.payload._id] = { ...request.payload, cannotRate: false };
             sendResponse('success');
           default:
             sendResponse('invalid function');

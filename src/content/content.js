@@ -51,7 +51,7 @@ function runContentScript() {
         console.log('response is:');
         console.log(response);
         flashcards = response;
-        highlightPageWords(flashcards.allFlashcards);
+        highlightPageWords(flashcards.reviewFlashcards);
       } else {
         console.log(`couldn't get flashcards`);
       }
@@ -109,7 +109,7 @@ function runContentScript() {
   function handleMarkedWordClick(e) {
     const clickedWordEl = e.target;
     const flashcardId = clickedWordEl.dataset.flashcardid;
-    const flashcard = flashcards.allFlashcards[flashcardId];
+    const flashcard = flashcards.reviewFlashcards[flashcardId];
     translationBox.show(clickedWordEl, flashcard);
   }
 
@@ -161,16 +161,21 @@ function runContentScript() {
           let method = 'delete';
           if (quality > 3) {
             updateHighlightedWords('delete', translationBox.currentFlashcard);
-            flashcards.allFlashcards = _.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
+            flashcards.reviewFlashcards = _.omit(flashcards.reviewFlashcards, translationBox.currentFlashcard._id);
           } else {
             method = 'put';
-            flashcards.allFlashcards[translationBox.currentFlashcard._id] = {
+            flashcards.reviewFlashcards[translationBox.currentFlashcard._id] = {
               ...translationBox.currentFlashcard,
               ..._.omit(supermemoResults, 'isRepeatAgain'),
               cannotRate: true
             };
-            console.log(flashcards.allFlashcards._id);
+            console.log(flashcards.reviewFlashcards._id);
           }
+          flashcards.allFlashcards[translationBox.currentFlashcard._id] = {
+            ...translationBox.currentFlashcard,
+            ..._.omit(supermemoResults, 'isRepeatAgain'),
+            cannotRate: true
+          };
           console.log('this is the current flashcard');
           console.log(translationBox.currentFlashcard);
           updateBgFlashcards(method, translationBox.currentFlashcard);
@@ -208,9 +213,12 @@ function runContentScript() {
                 schedule: null,
                 factor: null,
                 _id: response.data[0],
-                cannotRate: true
+                cannotRate: true,
+                originalLanguage: config.foreign,
+                translationLanguage: config.native
               };
               updateHighlightedWords('add', flashcard);
+              flashcards.reviewFlashcards[response.data[0]] = flashcard;
               flashcards.allFlashcards[response.data[0]] = flashcard;
               console.log(flashcards);
               updateBgFlashcards('post', flashcard);
@@ -229,16 +237,45 @@ function runContentScript() {
         }, 500);
       }
     });
+
+    function checkForExisting(term) {
+      console.log('heree2');
+      let card;
+      Object.values(flashcards.allFlashcards).forEach(flashcard => {
+        let textArray = flashcard.inverted ? flashcard.translations : flashcard.original;
+        console.log(term);
+        let tempCard = flashcard;
+        textArray.forEach(word => {
+          if (word.toLowerCase() === term.toLowerCase()) {
+            card = tempCard;
+          }
+        });
+      });
+      return card;
+    }
     newCardBox.domSelector.addEventListener('click', e => {
       if (newCardBox.stage === 'button') {
         console.log('clicked button');
-        newCardBox.showTranslations(config.foreign);
+        const existingFlashcard = checkForExisting(newCardBox.term);
+        console.log('does card exist?');
+        if (existingFlashcard) {
+          const wordElement = newCardBox.wordElement;
+          newCardBox.hide();
+          translationBox.show(wordElement, {
+            ...existingFlashcard,
+            cannotRate: existingFlashcard.cannotRate || !(new Date(existingFlashcard.dueDate) - new Date() < 0)
+          });
+          e.stopPropagation();
+        } else {
+          newCardBox.showTranslations(config.foreign);
+        }
       }
     });
     document.querySelector('.masterlingo__delete-icon').addEventListener('click', () => {
       if (confirm('Are you sure you want to delete this card?')) {
         console.log('removing');
         updateHighlightedWords('delete', translationBox.currentFlashcard);
+        flashcards.reviewFlashcards = _.omit(flashcards.reviewFlashcards, translationBox.currentFlashcard._id);
         flashcards.allFlashcards = _.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
         updateBgFlashcards('delete', translationBox.currentFlashcard);
         translationBox.hide();

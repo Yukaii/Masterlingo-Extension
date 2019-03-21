@@ -1,5 +1,5 @@
 export default function(text, language) {
-  console.log(language);
+  
   responsiveVoice.speak(text, supportedLanguages[language]);
 }
 
