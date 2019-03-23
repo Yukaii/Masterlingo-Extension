@@ -19235,7 +19235,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class newCardBox {
-  constructor() {
+  constructor(config) {
     let boxElement = document.createElement('div');
     boxElement.className = 'masterlingo__new-card-box';
     document.querySelector('body').appendChild(boxElement);
@@ -19244,6 +19244,7 @@ class newCardBox {
     this.term = '';
     this.translationsToSave = [];
     this.wordElement = null;
+    this.config = config;
   }
 
   showButton(selection) {
@@ -19273,45 +19274,49 @@ class newCardBox {
     this.domSelector.innerHTML = `<svg class="masterlingo__spinner" width="30px" height="30px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
      </svg>`;
     this.domSelector.classList.replace('masterlingo__new-card--button', 'masterlingo__new-card--translations');
-    const { data } = await axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(`https://masterlingoapp.com/api/translate/${this.term}`, {
-      headers: {
-        inverted: false
+
+    chrome.runtime.sendMessage({ method: 'get', function: 'translations', payload: this.term }, response => {
+      if (!response) return;
+      const data = response;
+      console.log(data);
+      console.log('got past promise');
+      if (data.translations && !data.error && data.invertable) {
+        console.log(data);
+        translationsHTML = data.translations.slice(0, 6).map(translation => {
+          return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
+        });
+        this.domSelector.innerHTML = `<div class="masterlingo__new-card--container"><div class="masterlingo__new-card--header"><div class="masterlingo__new-card--term" >${
+          this.term
+        }</div>
+        <div class="masterlingo__new-card--pos" >${
+          data.partOfSpeech[0] ? data.partOfSpeech[0].toLowerCase() : ''
+        }</div><i class="material-icons masterlingo__volume-icon--new">volume_up</i></div>${translationsHTML.join(
+          ''
+        )}</div>`;
+
+        if (this.config.autoAudio) Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_2__["default"])(this.term, foreign);
+
+        Array.from(document.getElementsByClassName('masterlingo__new-card--translation')).forEach(translationEl => {
+          translationEl.addEventListener('click', () => {
+            if (translationEl.classList.contains('saved-translation')) {
+              this.translationsToSave.splice(this.translationsToSave.indexOf(translationEl.textContent), 1);
+              translationEl.classList.remove('saved-translation');
+            } else if (this.translationsToSave.length < 4) {
+              this.translationsToSave.push(translationEl.textContent);
+              translationEl.classList.add('saved-translation');
+            } else {
+              alert(`You cannot save more than 4 translations at once, sorry :(`);
+            }
+          });
+        });
+        document.querySelector('.masterlingo__volume-icon--new').addEventListener('click', () => {
+          Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_2__["default"])(this.term, foreign);
+        });
+      } else {
+        this.domSelector.innerHTML = `No translations found, sorry.`;
+        this.domSelector.classList.add('masterlingo__error');
       }
     });
-    if (data.translations && !data.error && data.invertable) {
-      console.log(data);
-      translationsHTML = data.translations.slice(0, 6).map(translation => {
-        return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
-      });
-      this.domSelector.innerHTML = `<div class="masterlingo__new-card--container"><div class="masterlingo__new-card--header"><div class="masterlingo__new-card--term" >${
-        this.term
-      }</div>
-      <div class="masterlingo__new-card--pos" >${
-        data.partOfSpeech[0] ? data.partOfSpeech[0].toLowerCase() : ''
-      }</div><i class="material-icons masterlingo__volume-icon--new">volume_up</i></div>${translationsHTML.join(
-        ''
-      )}</div>`;
-      Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_2__["default"])(this.term, foreign);
-      Array.from(document.getElementsByClassName('masterlingo__new-card--translation')).forEach(translationEl => {
-        translationEl.addEventListener('click', () => {
-          if (translationEl.classList.contains('saved-translation')) {
-            this.translationsToSave.splice(this.translationsToSave.indexOf(translationEl.textContent), 1);
-            translationEl.classList.remove('saved-translation');
-          } else if (this.translationsToSave.length < 4) {
-            this.translationsToSave.push(translationEl.textContent);
-            translationEl.classList.add('saved-translation');
-          } else {
-            alert(`You cannot save more than 4 translations at once, sorry :(`);
-          }
-        });
-      });
-      document.querySelector('.masterlingo__volume-icon--new').addEventListener('click', () => {
-        Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_2__["default"])(this.term, foreign);
-      });
-    } else {
-      this.domSelector.innerHTML = `No translations found, sorry.`;
-      this.domSelector.classList.add('masterlingo__error');
-    }
   }
 
   async hide() {
@@ -19364,16 +19369,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class TranslationBox {
-  constructor(flashcards) {
+  constructor(config) {
     let boxElement = document.createElement('div');
     boxElement.className = 'masterlingo__translation-box';
     document.querySelector('body').appendChild(boxElement);
     this.domSelector = document.querySelector('.masterlingo__translation-box');
     this.activeClass = 'masterlingo__translation-box--active';
     this.initiate();
-    this.currentFlashcard = {};
-    this.flashcards = flashcards;
-    console.log(flashcards);
+    this.config = config;
   }
 
   initiate() {
@@ -19422,7 +19425,7 @@ class TranslationBox {
     this.setPosition(wordElement);
     this.currentFlashcard = flashcard;
     console.log(flashcard);
-    Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_1__["default"])(original, flashcard.originalLanguage);
+    if (this.config.autoAudio) Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_1__["default"])(original, flashcard.originalLanguage);
     document.querySelector('.masterlingo__volume-icon').addEventListener('click', () => {
       Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_1__["default"])(original, flashcard.originalLanguage);
     });
@@ -19466,29 +19469,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TranslationBox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TranslationBox */ "./src/content/TranslationBox.js");
 /* harmony import */ var _NewCardBox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewCardBox */ "./src/content/NewCardBox.js");
 /* harmony import */ var _supermemo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./supermemo */ "./src/content/supermemo.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
 
 
 
 
-
-/*
- ResponsiveVoice JS v1.5.14
-
- (c) 2015-2019 LearnBrite
-
- License: http://responsivevoice.org/license
-*/
 
 function runContentScript() {
-  let config = { native: '', foreign: '', loggedIn: false },
+  let config = {
+      native: '',
+      foreign: '',
+      loggedIn: false,
+      highlightElements: 'paragraphs',
+      activePages: 'targetLanguage',
+      autoAudio: true
+    },
     pageElements,
     flashcards,
     translationBox,
     newCardBox;
+
   const spanCode = '-198987';
 
   const readyStateCheckInterval = setInterval(function() {
@@ -19502,18 +19503,49 @@ function runContentScript() {
         if (response) {
           console.log(response);
           config = { ...config, foreign: response.foreign, native: response.native, loggedIn: true };
-          pageElements = document.querySelectorAll('p');
-          init();
-          console.log(flashcards);
+          getConfig();
         }
       });
     }
   }, 10);
+
   async function init() {
+    console.log(document.documentElement.lang);
+    if (
+      config.activePages === 'targetLanguage' &&
+      !document.documentElement.lang.includes(config.foreign) &&
+      document.documentElement.lang
+    ) {
+      console.log('this page is not in target language, stop content script');
+      return;
+    }
+    let targetElements = 'p';
+    if (config.highlightElements === 'all') {
+      targetElements = 'p, span, h1, h2, h3, h4, h5, h6';
+    }
+    console.log(targetElements);
+    pageElements = document.querySelectorAll(targetElements);
     getFlashcards(highlightPageWords);
-    translationBox = new _TranslationBox__WEBPACK_IMPORTED_MODULE_0__["default"]();
-    newCardBox = new _NewCardBox__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    translationBox = new _TranslationBox__WEBPACK_IMPORTED_MODULE_0__["default"](config);
+    newCardBox = new _NewCardBox__WEBPACK_IMPORTED_MODULE_1__["default"](config);
     addEventListeners();
+  }
+
+  function getConfig() {
+    // Use default value color = 'red' and likesColor = true.
+    chrome.storage.sync.get(
+      {
+        autoAudio: true,
+        activePages: 'targetLanguage',
+        highlightElements: 'paragraphs'
+      },
+      function(settings) {
+        config.autoAudio = settings.autoAudio;
+        config.activePages = settings.activePages;
+        config.highlightElements = settings.highlightElements;
+        init();
+      }
+    );
   }
 
   function getFlashcards() {
@@ -19536,6 +19568,7 @@ function runContentScript() {
       // loop over all elements
       elementHtml = pageElement.innerHTML;
       let noDuplicatesArray = [];
+      let changed = false;
       Object.values(flashcards).forEach(flashcard => {
         // loop over all cards
         let originalWords = flashcard.inverted ? flashcard.translations : flashcard.original;
@@ -19549,11 +19582,14 @@ function runContentScript() {
           // loop over all words in card
           let regularExp = new RegExp(`\\b(${originalWord})\\b`, 'gi'); // set regular expression to replace words
           elementHtml = elementHtml.replace(regularExp, match => {
+            changed = true;
             return `<mark data-flashcardid=${flashcard._id} >${match + spanCode}</mark>`;
           }); // update element html
         });
       });
-      pageElement.innerHTML = elementHtml; // update element html
+      if (changed) {
+        pageElement.innerHTML = elementHtml; // update element html
+      }
     }
     // get rid of a tags styling, add classes
     console.log('filtering anchors');
@@ -19596,8 +19632,8 @@ function runContentScript() {
       }
     });
 
-    function updateBgFlashcards(method, flashcard) {
-      chrome.runtime.sendMessage({ method, function: 'flashcard', payload: flashcard }, response => {
+    function updateBgFlashcards(method, flashcard, quality = null) {
+      chrome.runtime.sendMessage({ method, function: 'flashcard', payload: flashcard, quality }, response => {
         console.log('bg said' + response);
       });
     }
@@ -19628,35 +19664,32 @@ function runContentScript() {
           // handle card rating click
           console.log(translationBox.flashcards);
           const quality = e.target.id.split('-')[1];
+          const flashcardId = translationBox.currentFlashcard._id;
           const supermemoResults = Object(_supermemo__WEBPACK_IMPORTED_MODULE_2__["default"])(quality, translationBox.currentFlashcard);
           console.log(flashcards);
-          let method = 'delete';
           if (quality > 3) {
             updateHighlightedWords('delete', translationBox.currentFlashcard);
-            flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(flashcards.reviewFlashcards, translationBox.currentFlashcard._id);
+            flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(flashcards.reviewFlashcards, flashcardId);
           } else {
-            method = 'put';
-            flashcards.reviewFlashcards[translationBox.currentFlashcard._id] = {
+            flashcards.reviewFlashcards[flashcardId] = {
               ...translationBox.currentFlashcard,
-              ...lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(supermemoResults, 'isRepeatAgain'),
+              ...lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(supermemoResults, 'isRepeatAgain'),
               cannotRate: true
             };
             console.log(flashcards.reviewFlashcards._id);
           }
-          flashcards.allFlashcards[translationBox.currentFlashcard._id] = {
+          flashcards.allFlashcards[flashcardId] = {
             ...translationBox.currentFlashcard,
-            ...lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(supermemoResults, 'isRepeatAgain'),
+            ...lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(supermemoResults, 'isRepeatAgain'),
             cannotRate: true
           };
-          console.log('this is the current flashcard');
           console.log(translationBox.currentFlashcard);
-          updateBgFlashcards(method, translationBox.currentFlashcard);
-          console.log('UPDATING BG FLASHCARDS');
-          const response = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put(
-            `https://masterlingoapp.com/api/srs/${translationBox.currentFlashcard._id}`,
-            lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(supermemoResults, 'isRepeatAgain')
+          updateBgFlashcards(
+            'put',
+            { ...translationBox.currentFlashcard, ...lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(supermemoResults, 'isRepeatAgain') },
+            quality
           );
-          console.log(response);
+          console.log('UPDATING BG FLASHCARDS');
         }
       });
     });
@@ -19669,14 +19702,14 @@ function runContentScript() {
         if (newCardBox.translationsToSave.length > 0) {
           const translations = newCardBox.translationsToSave,
             original = [newCardBox.term.trim()];
-          axios__WEBPACK_IMPORTED_MODULE_3___default.a
-            .post('https://masterlingoapp.com/api/flashcards', {
-              translations,
-              inverted: false,
-              original
-            })
-            .then(response => {
-              console.log(response);
+          chrome.runtime.sendMessage(
+            {
+              method: 'post',
+              function: 'flashcard',
+              payload: { original, translations, inverted: false }
+            },
+            id => {
+              console.log(id);
               const flashcard = {
                 translations,
                 inverted: false,
@@ -19684,17 +19717,17 @@ function runContentScript() {
                 repetition: null,
                 schedule: null,
                 factor: null,
-                _id: response.data[0],
+                _id: id,
                 cannotRate: true,
                 originalLanguage: config.foreign,
                 translationLanguage: config.native
               };
               updateHighlightedWords('add', flashcard);
-              flashcards.reviewFlashcards[response.data[0]] = flashcard;
-              flashcards.allFlashcards[response.data[0]] = flashcard;
+              flashcards.reviewFlashcards[id] = flashcard;
+              flashcards.allFlashcards[id] = flashcard;
               console.log(flashcards);
-              updateBgFlashcards('post', flashcard);
-            });
+            }
+          );
         }
         newCardBox.hide();
       }
@@ -19747,19 +19780,10 @@ function runContentScript() {
       if (confirm('Are you sure you want to delete this card?')) {
         console.log('removing');
         updateHighlightedWords('delete', translationBox.currentFlashcard);
-        flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(flashcards.reviewFlashcards, translationBox.currentFlashcard._id);
-        flashcards.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_4___default.a.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
+        flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(flashcards.reviewFlashcards, translationBox.currentFlashcard._id);
+        flashcards.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
         updateBgFlashcards('delete', translationBox.currentFlashcard);
         translationBox.hide();
-        axios__WEBPACK_IMPORTED_MODULE_3___default.a
-          .delete(`https://masterlingoapp.com/api/flashcards/${translationBox.currentFlashcard._id}`)
-          .then(result => {
-            console.log('db record deleted successfully');
-            console.log(result);
-          })
-          .catch(err => {
-            console.log(err);
-          });
       }
     });
   }

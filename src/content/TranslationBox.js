@@ -2,16 +2,14 @@ import _ from 'lodash';
 import textToSpeech from './responsiveVoice';
 
 class TranslationBox {
-  constructor(flashcards) {
+  constructor(config) {
     let boxElement = document.createElement('div');
     boxElement.className = 'masterlingo__translation-box';
     document.querySelector('body').appendChild(boxElement);
     this.domSelector = document.querySelector('.masterlingo__translation-box');
     this.activeClass = 'masterlingo__translation-box--active';
     this.initiate();
-    this.currentFlashcard = {};
-    this.flashcards = flashcards;
-    console.log(flashcards);
+    this.config = config;
   }
 
   initiate() {
@@ -60,7 +58,7 @@ class TranslationBox {
     this.setPosition(wordElement);
     this.currentFlashcard = flashcard;
     console.log(flashcard);
-    textToSpeech(original, flashcard.originalLanguage);
+    if (this.config.autoAudio) textToSpeech(original, flashcard.originalLanguage);
     document.querySelector('.masterlingo__volume-icon').addEventListener('click', () => {
       textToSpeech(original, flashcard.originalLanguage);
     });

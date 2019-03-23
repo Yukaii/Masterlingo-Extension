@@ -38,6 +38,16 @@ function addListeners() {
             console.log(flashcards);
             sendResponse({ ...flashcards });
             break;
+          case 'translations':
+            mslApi
+              .getTranslations(request.payload)
+              .then(response => {
+                sendResponse(response);
+              })
+              .catch(err => {
+                sendResponse(err);
+              });
+            return true;
           default:
             sendResponse('invalid function');
             break;
@@ -46,10 +56,24 @@ function addListeners() {
       case 'put':
         switch (request.function) {
           case 'flashcard':
-            flashcards.reviewFlashcards[request.payload._id] = request.payload;
-            flashcards.allFlashcards[request.payload._id] = request.payload;
-            sendResponse('success');
-            break;
+            const id = request.payload._id;
+            if (parseInt(request.quality) > 3) {
+              flashcards.reviewFlashcards = _.omit(flashcards.reviewFlashcards, id);
+            } else {
+              flashcards.reviewFlashcards[id] = request.payload;
+            }
+            flashcards.allFlashcards[id] = request.payload;
+            mslApi
+              .upadateFlashcardSrs(request.payload)
+              .then(response => {
+                console.log(response);
+                sendResponse(response);
+              })
+              .catch(err => {
+                console.log(err);
+                sendResponse(err);
+              });
+            return true;
           default:
             sendResponse('invalid function');
             break;
@@ -63,7 +87,15 @@ function addListeners() {
             flashcards.reviewFlashcards = _.omit(flashcards.reviewFlashcards, request.payload._id);
             flashcards.allFlashcards = _.omit(flashcards.allFlashcards, request.payload._id);
             console.log(flashcards.reviewFlashcards);
-            sendResponse('success');
+            mslApi
+              .deleteFlashcard(request.payload)
+              .then(() => {
+                sendResponse('success');
+              })
+              .catch(err => {
+                sendResponse(err);
+              });
+            return true;
           default:
             sendResponse('invalid function');
             break;
@@ -72,9 +104,29 @@ function addListeners() {
       case 'post':
         switch (request.function) {
           case 'flashcard':
-            flashcards.reviewFlashcards[request.payload._id] = { ...request.payload, cannotRate: false };
-            flashcards.allFlashcards[request.payload._id] = { ...request.payload, cannotRate: false };
-            sendResponse('success');
+            mslApi.createFlashcard(request.payload).then(data => {
+              if (data[0]) {
+                const id = data[0];
+                const flashcard = {
+                  translations: request.payload.translations,
+                  inverted: false,
+                  original: request.payload.original,
+                  repetition: null,
+                  schedule: null,
+                  factor: null,
+                  _id: id,
+                  cannotRate: false,
+                  originalLanguage: config.foreign,
+                  translationLanguage: config.native
+                };
+                flashcards.reviewFlashcards[id] = flashcard;
+                flashcards.allFlashcards[id] = flashcard;
+                sendResponse(id);
+              }
+              sendResponse(false);
+            });
+            return true;
+            break;
           default:
             sendResponse('invalid function');
             break;
@@ -83,6 +135,7 @@ function addListeners() {
       default:
         sendResponse('invalid method');
     }
+    return true;
   });
 }
 

@@ -41,8 +41,20 @@ async function updateFlashcard(flashcard) {
   }
 }
 
+async function upadateFlashcardSrs(flashcard) {
+  console.log(flashcard);
+  console.log('sending flashcard to srs update');
+  const response = await masterLingoApi.put(`/srs/${flashcard._id}`, {
+    repetition: flashcard.repetition,
+    dueDate: flashcard.dueDate,
+    schedule: flashcard.schedule,
+    factor: flashcard.factor
+  });
+  console.log(response);
+}
+
 async function deleteFlashcard(flashcard) {
-  const result = await masterLingoApi.put(`/flashcards/${flashcard._id}`, flashcard);
+  const result = await masterLingoApi.delete(`/flashcards/${flashcard._id}`);
   if (result.data) {
     return result.data;
   } else {
@@ -50,8 +62,8 @@ async function deleteFlashcard(flashcard) {
   }
 }
 
-async function addFlashcard(flashcard) {
-  const result = await masterLingoApi.put(`/flashcards/${flashcard._id}`, flashcard);
+async function createFlashcard(flashcard) {
+  const result = await masterLingoApi.post(`/flashcards`, flashcard);
   if (result.data) {
     return result.data;
   } else {
@@ -60,7 +72,12 @@ async function addFlashcard(flashcard) {
 }
 
 async function getTranslations(word) {
-  const result = await masterLingoApi.get('/translate', word);
+  const result = await masterLingoApi.get(`/translate/${word}`, {
+    headers: {
+      inverted: false
+    }
+  });
+  console.log(result);
   if (result.data) {
     return result.data;
   } else {
@@ -72,9 +89,10 @@ const apiMethods = {
   getFlashcards,
   updateFlashcard,
   deleteFlashcard,
-  addFlashcard,
+  createFlashcard,
   login,
-  getTranslations
+  getTranslations,
+  upadateFlashcardSrs
 };
 
 export default apiMethods;

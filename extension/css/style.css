@@ -128,7 +128,8 @@ mark {
   min-height: 100px;
   background-color: #fff;
   width: max-content;
-  font-family: 'Proxima Nova'; }
+  font-family: 'Proxima Nova';
+  overflow-wrap: break-word; }
 
 .masterlingo__new-card--header {
   display: flex;

@@ -19260,6 +19260,16 @@ function addListeners() {
             console.log(flashcards);
             sendResponse({ ...flashcards });
             break;
+          case 'translations':
+            _msLingoApi__WEBPACK_IMPORTED_MODULE_1__["default"]
+              .getTranslations(request.payload)
+              .then(response => {
+                sendResponse(response);
+              })
+              .catch(err => {
+                sendResponse(err);
+              });
+            return true;
           default:
             sendResponse('invalid function');
             break;
@@ -19268,10 +19278,24 @@ function addListeners() {
       case 'put':
         switch (request.function) {
           case 'flashcard':
-            flashcards.reviewFlashcards[request.payload._id] = request.payload;
-            flashcards.allFlashcards[request.payload._id] = request.payload;
-            sendResponse('success');
-            break;
+            const id = request.payload._id;
+            if (parseInt(request.quality) > 3) {
+              flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.omit(flashcards.reviewFlashcards, id);
+            } else {
+              flashcards.reviewFlashcards[id] = request.payload;
+            }
+            flashcards.allFlashcards[id] = request.payload;
+            _msLingoApi__WEBPACK_IMPORTED_MODULE_1__["default"]
+              .upadateFlashcardSrs(request.payload)
+              .then(response => {
+                console.log(response);
+                sendResponse(response);
+              })
+              .catch(err => {
+                console.log(err);
+                sendResponse(err);
+              });
+            return true;
           default:
             sendResponse('invalid function');
             break;
@@ -19285,7 +19309,15 @@ function addListeners() {
             flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.omit(flashcards.reviewFlashcards, request.payload._id);
             flashcards.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.omit(flashcards.allFlashcards, request.payload._id);
             console.log(flashcards.reviewFlashcards);
-            sendResponse('success');
+            _msLingoApi__WEBPACK_IMPORTED_MODULE_1__["default"]
+              .deleteFlashcard(request.payload)
+              .then(() => {
+                sendResponse('success');
+              })
+              .catch(err => {
+                sendResponse(err);
+              });
+            return true;
           default:
             sendResponse('invalid function');
             break;
@@ -19294,9 +19326,29 @@ function addListeners() {
       case 'post':
         switch (request.function) {
           case 'flashcard':
-            flashcards.reviewFlashcards[request.payload._id] = { ...request.payload, cannotRate: false };
-            flashcards.allFlashcards[request.payload._id] = { ...request.payload, cannotRate: false };
-            sendResponse('success');
+            _msLingoApi__WEBPACK_IMPORTED_MODULE_1__["default"].createFlashcard(request.payload).then(data => {
+              if (data[0]) {
+                const id = data[0];
+                const flashcard = {
+                  translations: request.payload.translations,
+                  inverted: false,
+                  original: request.payload.original,
+                  repetition: null,
+                  schedule: null,
+                  factor: null,
+                  _id: id,
+                  cannotRate: false,
+                  originalLanguage: config.foreign,
+                  translationLanguage: config.native
+                };
+                flashcards.reviewFlashcards[id] = flashcard;
+                flashcards.allFlashcards[id] = flashcard;
+                sendResponse(id);
+              }
+              sendResponse(false);
+            });
+            return true;
+            break;
           default:
             sendResponse('invalid function');
             break;
@@ -19305,6 +19357,7 @@ function addListeners() {
       default:
         sendResponse('invalid method');
     }
+    return true;
   });
 }
 
@@ -19367,8 +19420,20 @@ async function updateFlashcard(flashcard) {
   }
 }
 
+async function upadateFlashcardSrs(flashcard) {
+  console.log(flashcard);
+  console.log('sending flashcard to srs update');
+  const response = await masterLingoApi.put(`/srs/${flashcard._id}`, {
+    repetition: flashcard.repetition,
+    dueDate: flashcard.dueDate,
+    schedule: flashcard.schedule,
+    factor: flashcard.factor
+  });
+  console.log(response);
+}
+
 async function deleteFlashcard(flashcard) {
-  const result = await masterLingoApi.put(`/flashcards/${flashcard._id}`, flashcard);
+  const result = await masterLingoApi.delete(`/flashcards/${flashcard._id}`);
   if (result.data) {
     return result.data;
   } else {
@@ -19376,8 +19441,8 @@ async function deleteFlashcard(flashcard) {
   }
 }
 
-async function addFlashcard(flashcard) {
-  const result = await masterLingoApi.put(`/flashcards/${flashcard._id}`, flashcard);
+async function createFlashcard(flashcard) {
+  const result = await masterLingoApi.post(`/flashcards`, flashcard);
   if (result.data) {
     return result.data;
   } else {
@@ -19386,7 +19451,12 @@ async function addFlashcard(flashcard) {
 }
 
 async function getTranslations(word) {
-  const result = await masterLingoApi.get('/translate', word);
+  const result = await masterLingoApi.get(`/translate/${word}`, {
+    headers: {
+      inverted: false
+    }
+  });
+  console.log(result);
   if (result.data) {
     return result.data;
   } else {
@@ -19398,9 +19468,10 @@ const apiMethods = {
   getFlashcards,
   updateFlashcard,
   deleteFlashcard,
-  addFlashcard,
+  createFlashcard,
   login,
-  getTranslations
+  getTranslations,
+  upadateFlashcardSrs
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (apiMethods);

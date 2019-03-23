@@ -26,6 +26,7 @@ mark {
     background-color: $color-white;
     width: max-content;
     font-family: 'Proxima Nova';
+    overflow-wrap: break-word;
   }
   &__new-card--header {
     display: flex;
