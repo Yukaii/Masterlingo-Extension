@@ -5,7 +5,8 @@ import _ from 'lodash';
 let config = {
     loggedIn: false,
     native: '',
-    foreign: ''
+    foreign: '',
+    username: ''
   },
   flashcards = new Flashcards();
 
@@ -15,11 +16,14 @@ async function init() {
     config.loggedIn = true;
     config.native = user.native;
     config.foreign = user.foreign;
+    config.username = user.name;
+    console.log(user);
     await flashcards.getFlashcards();
-    addListeners();
   } else {
     console.log('could not log in');
   }
+  addListeners();
+  return config;
 }
 
 // handles request from content scripts
@@ -48,6 +52,29 @@ function addListeners() {
                 sendResponse(err);
               });
             return true;
+          case 'login':
+            if (config.loggedIn) {
+              sendResponse(config);
+              break;
+            }
+            init().then(config => {
+              console.log('this is the config');
+              console.log(config);
+              if (config) {
+                sendResponse(config);
+              } else {
+                sendResponse(false);
+              }
+            });
+            return true;
+          case 'logout':
+            config.loggedIn = false;
+            config.foreign = '';
+            config.native = '';
+            config.username = '';
+            flashcards = {};
+            sendResponse('success');
+            break;
           default:
             sendResponse('invalid function');
             break;

@@ -13,6 +13,7 @@ class newCardBox {
     this.translationsToSave = [];
     this.wordElement = null;
     this.config = config;
+    this.flip = false;
   }
 
   showButton(selection) {
@@ -27,6 +28,8 @@ class newCardBox {
       this.domSelector.classList.add('masterlingo__new-card-box--active');
       this.setPosition(wordElement);
       this.domSelector.innerHTML = `M<span>L</span>`;
+      this.domSelector.style.transform = `translate(-50%, 100%)`;
+
       this.term = selection.toString().trim();
       console.log('THIS IS THE TERM');
       console.log(this.term);
@@ -42,6 +45,19 @@ class newCardBox {
     this.domSelector.innerHTML = `<svg class="masterlingo__spinner" width="30px" height="30px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
      </svg>`;
     this.domSelector.classList.replace('masterlingo__new-card--button', 'masterlingo__new-card--translations');
+    if (this.config.autoAudio) textToSpeech(this.term, foreign);
+    if (this.flip) {
+      this.domSelector.style.transform = `translate(-50%, ${this.height + 25 + 'px'})`;
+      this.domSelector.classList.add('masterlingo__flip-after');
+    } else {
+      this.domSelector.style.transform = `translate(-50%, -100%)`;
+    }
+    if (this.term.length > 80) {
+      this.domSelector.innerHTML = `Text too long`;
+      this.domSelector.classList.add('masterlingo__error');
+      return;
+    }
+    this.domSelector.style.top = parseInt(this.domSelector.style.top.split('.')[0]) - 5 + 'px';
 
     chrome.runtime.sendMessage({ method: 'get', function: 'translations', payload: this.term }, response => {
       if (!response) return;
@@ -61,8 +77,12 @@ class newCardBox {
         }</div><i class="material-icons masterlingo__volume-icon--new">volume_up</i></div>${translationsHTML.join(
           ''
         )}</div>`;
-
-        if (this.config.autoAudio) textToSpeech(this.term, foreign);
+        console.log(this.term.length);
+        if (this.term.length > 25) {
+          document.querySelector('.masterlingo__new-card--term').style.fontSize = '17px';
+        } else {
+          document.querySelector('.masterlingo__new-card--term').style.fontSize = '25px';
+        }
 
         Array.from(document.getElementsByClassName('masterlingo__new-card--translation')).forEach(translationEl => {
           translationEl.addEventListener('click', () => {
@@ -92,6 +112,8 @@ class newCardBox {
     this.domSelector.classList.remove('masterlingo__new-card--button');
     this.domSelector.classList.remove('masterlingo__error');
     this.domSelector.classList.remove('masterlingo__new-card-box--active');
+    this.domSelector.classList.remove('masterlingo__flip-after');
+    this.domSelector.style.transform = 'transform: translate(0)';
     this.domSelector.style.display = 'none';
     this.translationsToSave = [];
     this.wordElement = null;
@@ -100,9 +122,19 @@ class newCardBox {
 
   setPosition(wordElement) {
     const wordOffset = this.getOffset(wordElement);
-    console.log(wordElement);
+    if (wordOffset.left === 0 || wordOffset.top === 0 || wordOffset.width === 0) {
+      this.hide();
+      return;
+    }
+    if (wordOffset.top - window.scrollY < 200) {
+      this.flip = true;
+      this.height = wordOffset.height;
+      console.log('flipping');
+    } else {
+      this.flip = false;
+    }
     this.domSelector.style.left = wordOffset.left + wordOffset.width / 2 + 'px';
-    this.domSelector.style.top = wordOffset.top - 10 + 'px';
+    this.domSelector.style.top = wordOffset.top - 5 + 'px';
   }
 
   getOffset(element) {
@@ -111,7 +143,8 @@ class newCardBox {
     return {
       left: rect.left + window.scrollX,
       top: rect.top + window.scrollY,
-      width: rect.width
+      width: rect.width,
+      height: rect.height
     };
   }
 }

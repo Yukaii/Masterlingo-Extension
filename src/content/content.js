@@ -3,6 +3,15 @@ import NewCardBox from './NewCardBox';
 import supermemo from './supermemo';
 import _ from 'lodash';
 
+console.log(window.location.href);
+if (window.location.href === 'https://masterlingoapp.com/#') {
+  console.log('met condition');
+  chrome.runtime.sendMessage({ method: 'get', function: 'login' }, response => {
+    console.log('got response');
+    console.log(response);
+  });
+}
+
 function runContentScript() {
   let config = {
       native: '',
@@ -48,7 +57,7 @@ function runContentScript() {
     }
     let targetElements = 'p';
     if (config.highlightElements === 'all') {
-      targetElements = 'p, span, h1, h2, h3, h4, h5, h6';
+      targetElements = 'p, span';
     }
     console.log(targetElements);
     pageElements = document.querySelectorAll(targetElements);
@@ -262,6 +271,7 @@ function runContentScript() {
 
     document.addEventListener('mouseup', function(e) {
       let selection = window.getSelection(); //get the text range
+      console.log('this is the ancestor');
       if (selection.toString()) {
         newCardBox.showButton(selection);
         setTimeout(() => {
@@ -306,11 +316,12 @@ function runContentScript() {
     document.querySelector('.masterlingo__delete-icon').addEventListener('click', () => {
       if (confirm('Are you sure you want to delete this card?')) {
         console.log('removing');
-        updateHighlightedWords('delete', translationBox.currentFlashcard);
-        flashcards.reviewFlashcards = _.omit(flashcards.reviewFlashcards, translationBox.currentFlashcard._id);
-        flashcards.allFlashcards = _.omit(flashcards.allFlashcards, translationBox.currentFlashcard._id);
-        updateBgFlashcards('delete', translationBox.currentFlashcard);
+        const { currentFlashcard } = translationBox;
         translationBox.hide();
+        updateHighlightedWords('delete', currentFlashcard);
+        flashcards.reviewFlashcards = _.omit(flashcards.reviewFlashcards, currentFlashcard._id);
+        flashcards.allFlashcards = _.omit(flashcards.allFlashcards, currentFlashcard._id);
+        updateBgFlashcards('delete', currentFlashcard);
       }
     });
   }

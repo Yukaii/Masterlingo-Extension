@@ -15,8 +15,9 @@ mark {
   &__translation-box {
     flex-direction: column;
     color: $color-black;
-    font-family: 'Proxima Nova';
+    font-family: 'Proxima Nova' !important;
     position: relative;
+    font-weight: 400;
   }
   &__new-card--translations {
     width: auto;
@@ -25,8 +26,9 @@ mark {
     min-height: 100px;
     background-color: $color-white;
     width: max-content;
-    font-family: 'Proxima Nova';
+    font-family: 'Proxima Nova' !important;
     overflow-wrap: break-word;
+    font-weight: 400;
   }
   &__new-card--header {
     display: flex;
@@ -35,20 +37,22 @@ mark {
     margin-bottom: 5px;
     padding-bottom: 5px;
     border-bottom: 2px solid $color-grey-light-1;
-    font-family: 'Proxima Nova';
+    font-family: 'Proxima Nova' !important;
+    font-weight: 400;
   }
   &__new-card--term {
     font-size: 25px;
     margin-right: 8px;
-    font-weight: 500;
-    font-family: 'Proxima Nova';
+    font-weight: 600;
+    font-family: 'Proxima Nova' !important;
   }
   &__new-card--pos {
-    font-family: 'Proxima Nova';
+    font-family: 'Proxima Nova' !important;
     font-style: italic;
     color: $color-grey-light-3;
     margin-right: 10px;
     user-select: none;
+    font-weight: 400;
   }
 
   &__new-card--audio {
@@ -57,8 +61,9 @@ mark {
   }
   &__new-card--translation-container {
     display: inline-block;
-    width: max-content;
     position: relative;
+    overflow-wrap: break-word;
+    word-wrap: normal;
     &:last-of-type {
       margin-right: 25px !important;
     }
@@ -91,6 +96,7 @@ mark {
     position: relative;
     user-select: none;
     color: $color-grey-dark-1 !important;
+    overflow-wrap: break-word;
     &:hover {
       background-color: $color-green;
       // transform: scale(1.05);
@@ -198,6 +204,13 @@ mark {
       color: $color-green !important;
     }
   }
+  &__flip-after {
+    &::after {
+      clip-path: polygon(0 100%, 100% 100%, 50% 0%);
+      top: -15px;
+    }
+  }
+
   &__volume-icon {
     position: absolute;
     top: 7px;

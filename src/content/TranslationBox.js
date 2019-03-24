@@ -10,6 +10,8 @@ class TranslationBox {
     this.activeClass = 'masterlingo__translation-box--active';
     this.initiate();
     this.config = config;
+    this.flip = false;
+    this.height = 0;
   }
 
   initiate() {
@@ -35,9 +37,18 @@ class TranslationBox {
 
   show(wordElement, flashcard) {
     console.log('about to show');
+    this.setPosition(wordElement);
+    this.domSelector.classList.remove('masterlingo__flip-after');
+
     console.log(flashcard);
     if (!flashcard) return;
     this.domSelector.classList.add(this.activeClass);
+    if (this.flip) {
+      this.domSelector.style.transform = `translate(-50%, ${this.height + 25 + 'px'})`;
+      this.domSelector.classList.add('masterlingo__flip-after');
+    } else {
+      this.domSelector.style.transform = `translate(-50%, -100%)`;
+    }
     const translations = flashcard.inverted ? flashcard.original.join(', ') : flashcard.translations.join(', ');
     const original = !flashcard.inverted ? flashcard.original.join(', ') : flashcard.translations.join(', ');
     let fontSize = 26;
@@ -55,7 +66,6 @@ class TranslationBox {
     }
     this.translationsDomSelector.style.fontSize = fontSize + 'px';
     this.translationsDomSelector.textContent = translations;
-    this.setPosition(wordElement);
     this.currentFlashcard = flashcard;
     console.log(flashcard);
     if (this.config.autoAudio) textToSpeech(original, flashcard.originalLanguage);
@@ -66,13 +76,22 @@ class TranslationBox {
 
   hide() {
     this.domSelector.classList.remove(this.activeClass);
+    this.domSelector.classList.remove('masterlingo__flip-after');
   }
 
   setPosition(wordElement) {
     const wordOffset = this.getOffset(wordElement);
     const elWidth = wordElement.offsetWidth || wordOffset.width;
+
+    if (wordOffset.top - window.scrollY < 200) {
+      this.flip = true;
+      this.height = wordOffset.height;
+      console.log('flipping');
+    } else {
+      this.flip = false;
+    }
     this.domSelector.style.left = wordOffset.left + elWidth / 2 + 'px';
-    this.domSelector.style.top = wordOffset.top - 15 + 'px';
+    this.domSelector.style.top = wordOffset.top - 10 + 'px';
   }
 
   getOffset(element) {
@@ -80,7 +99,8 @@ class TranslationBox {
     return {
       left: rect.left + window.scrollX,
       top: rect.top + window.scrollY,
-      width: rect.width
+      width: rect.width,
+      height: rect.height
     };
   }
 }

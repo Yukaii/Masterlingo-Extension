@@ -85,6 +85,11 @@ async function getTranslations(word) {
   }
 }
 
+async function signIn() {
+  const result = await axios.get(`https://masterlingoapp.com/auth/google`);
+  return result;
+}
+
 const apiMethods = {
   getFlashcards,
   updateFlashcard,
@@ -92,7 +97,8 @@ const apiMethods = {
   createFlashcard,
   login,
   getTranslations,
-  upadateFlashcardSrs
+  upadateFlashcardSrs,
+  signIn
 };
 
 export default apiMethods;

@@ -19227,7 +19227,8 @@ __webpack_require__.r(__webpack_exports__);
 let config = {
     loggedIn: false,
     native: '',
-    foreign: ''
+    foreign: '',
+    username: ''
   },
   flashcards = new _Flashcards__WEBPACK_IMPORTED_MODULE_0__["default"]();
 
@@ -19237,11 +19238,14 @@ async function init() {
     config.loggedIn = true;
     config.native = user.native;
     config.foreign = user.foreign;
+    config.username = user.name;
+    console.log(user);
     await flashcards.getFlashcards();
-    addListeners();
   } else {
     console.log('could not log in');
   }
+  addListeners();
+  return config;
 }
 
 // handles request from content scripts
@@ -19270,6 +19274,29 @@ function addListeners() {
                 sendResponse(err);
               });
             return true;
+          case 'login':
+            if (config.loggedIn) {
+              sendResponse(config);
+              break;
+            }
+            init().then(config => {
+              console.log('this is the config');
+              console.log(config);
+              if (config) {
+                sendResponse(config);
+              } else {
+                sendResponse(false);
+              }
+            });
+            return true;
+          case 'logout':
+            config.loggedIn = false;
+            config.foreign = '';
+            config.native = '';
+            config.username = '';
+            flashcards = {};
+            sendResponse('success');
+            break;
           default:
             sendResponse('invalid function');
             break;
@@ -19464,6 +19491,11 @@ async function getTranslations(word) {
   }
 }
 
+async function signIn() {
+  const result = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`https://masterlingoapp.com/auth/google`);
+  return result;
+}
+
 const apiMethods = {
   getFlashcards,
   updateFlashcard,
@@ -19471,7 +19503,8 @@ const apiMethods = {
   createFlashcard,
   login,
   getTranslations,
-  upadateFlashcardSrs
+  upadateFlashcardSrs,
+  signIn
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (apiMethods);
