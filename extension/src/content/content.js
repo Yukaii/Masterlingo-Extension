@@ -19530,13 +19530,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 console.log(window.location.href);
-if (window.location.href === 'https://masterlingoapp.com/#') {
-  console.log('met condition');
-  chrome.runtime.sendMessage({ method: 'get', function: 'login' }, response => {
-    console.log('got response');
-    console.log(response);
-  });
-}
 
 function runContentScript() {
   let config = {
@@ -19547,7 +19540,6 @@ function runContentScript() {
       activePages: 'targetLanguage',
       autoAudio: true
     },
-    pageElements,
     flashcards,
     translationBox,
     newCardBox;
@@ -19571,26 +19563,50 @@ function runContentScript() {
     }
   }, 10);
 
-  async function init() {
-    console.log(document.documentElement.lang);
+  function stopForLanguage() {
     if (
       config.activePages === 'targetLanguage' &&
       !document.documentElement.lang.includes(config.foreign) &&
       document.documentElement.lang
     ) {
       console.log('this page is not in target language, stop content script');
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function stopForHomePage() {
+    if (window.location.href.includes('https://masterlingoapp.com')) {
+      console.log('met condition');
+      chrome.runtime.sendMessage({ method: 'get', function: 'login' }, response => {
+        console.log('got response');
+        console.log(response);
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  async function init() {
+    console.log(document.documentElement.lang);
+    if (stopForHomePage() || stopForLanguage()) {
+      // on maasterlingoapp.com or different language
       return;
     }
-    let targetElements = 'p';
-    if (config.highlightElements === 'all') {
-      targetElements = 'p, span';
-    }
-    console.log(targetElements);
-    pageElements = document.querySelectorAll(targetElements);
     getFlashcards(highlightPageWords);
     translationBox = new _TranslationBox__WEBPACK_IMPORTED_MODULE_0__["default"](config);
     newCardBox = new _NewCardBox__WEBPACK_IMPORTED_MODULE_1__["default"](config);
     addEventListeners();
+  }
+
+  function selectTargetElements() {
+    let targetElements = 'p';
+    if (config.highlightElements === 'all') {
+      targetElements = 'p, span, h1, h2, h3, h4, h5, h6, div';
+    }
+    return document.querySelectorAll(targetElements);
   }
 
   function getConfig() {
@@ -19626,9 +19642,10 @@ function runContentScript() {
 
   function highlightPageWords(flashcards) {
     let elementHtml;
+    let pageElements = selectTargetElements();
     for (let pageElement of pageElements) {
       // loop over all elements
-      elementHtml = pageElement.innerHTML;
+      elementHtml = pageElement.outerHTML;
       let noDuplicatesArray = [];
       let changed = false;
       Object.values(flashcards).forEach(flashcard => {
@@ -19642,20 +19659,25 @@ function runContentScript() {
             noDuplicatesArray.push(originalWord);
           }
           // loop over all words in card
-          let regularExp = new RegExp(`\\b(${originalWord})\\b`, 'gi'); // set regular expression to replace words
-          elementHtml = elementHtml.replace(regularExp, match => {
+          // let regularExp = new RegExp(`\\b(${originalWord})\\b`, 'gi'); // set regular expression to replace words
+          let regularExp = new RegExp(`(?<=[^><]*)\\b(${originalWord})\\b(?=[^><]*<\/čč[b-z])`, 'gi'); // set regular expression to replace words
+          // console.log('about to find matches');
+          elementHtml = elementHtml.replace(regularExp, (match, g1, g2, g3) => {
             changed = true;
-            return `<mark data-flashcardid=${flashcard._id} >${match + spanCode}</mark>`;
+            return `<mark data-flashcardid=${flashcard._id} class="masterlingo__marked-word">${match}</mark>`;
           }); // update element html
         });
       });
       if (changed) {
-        pageElement.innerHTML = elementHtml; // update element html
+        pageElement.outerHTML = elementHtml; // update element html
       }
     }
+    let alreadyHighlightedList = document.getElementsByClassName('masterlingo__marked-word');
+    Array.from(alreadyHighlightedList).forEach(alreadyHighlighted => {
+      alreadyHighlighted.addEventListener('click', handleMarkedWordClick);
+    });
     // get rid of a tags styling, add classes
-    console.log('filtering anchors');
-    filterAnchorsOut();
+    // filterAnchorsOut();
   }
 
   function filterAnchorsOut() {
@@ -19764,6 +19786,7 @@ function runContentScript() {
         if (newCardBox.translationsToSave.length > 0) {
           const translations = newCardBox.translationsToSave,
             original = [newCardBox.term.trim()];
+          console.log('about to send a message');
           chrome.runtime.sendMessage(
             {
               method: 'post',
