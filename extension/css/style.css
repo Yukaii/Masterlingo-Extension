@@ -111,9 +111,10 @@ mark {
   color: #db755e !important;
   cursor: pointer;
   background-color: transparent;
-  padding: 0; }
+  padding: 0;
+  transition: all 0.2s ease; }
   .masterlingo__marked-word:hover {
-    color: #dba294 !important; }
+    color: #e0c1b9 !important; }
 
 .masterlingo__translation-box {
   flex-direction: column;
@@ -232,7 +233,7 @@ mark {
   min-height: 110px; }
 
 .masterlingo__translation-box, .masterlingo__new-card-box {
-  transform: translate(-50%, -100%); }
+  transform: translate(0%, -100%); }
   .masterlingo__translation-box::after, .masterlingo__new-card-box::after {
     clip-path: polygon(0 0, 100% 0, 50% 100%);
     top: 100%; }

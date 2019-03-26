@@ -146,9 +146,11 @@ function addListeners() {
                   originalLanguage: config.foreign,
                   translationLanguage: config.native
                 };
+                console.log('this is the new flashcard');
+                console.log(flashcard);
                 flashcards.reviewFlashcards[id] = flashcard;
                 flashcards.allFlashcards[id] = flashcard;
-                sendResponse(id);
+                sendResponse(flashcard);
               }
               sendResponse(false);
             });

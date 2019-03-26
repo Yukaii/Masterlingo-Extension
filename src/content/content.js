@@ -18,8 +18,6 @@ function runContentScript() {
     translationBox,
     newCardBox;
 
-  const spanCode = '-198987';
-
   const readyStateCheckInterval = setInterval(function() {
     if (document.readyState === 'complete') {
       clearInterval(readyStateCheckInterval);
@@ -78,9 +76,9 @@ function runContentScript() {
   function selectTargetElements() {
     let targetElements = 'p';
     if (config.highlightElements === 'all') {
-      targetElements = 'p, span, h1, h2, h3, h4, h5, h6, div';
+      targetElements = 'p, span, h1, h2, h3, h4, h5, h6, dd';
     }
-    return document.querySelectorAll(targetElements);
+    return document.body.querySelectorAll(targetElements);
   }
 
   function getConfig() {
@@ -134,9 +132,12 @@ function runContentScript() {
           }
           // loop over all words in card
           // let regularExp = new RegExp(`\\b(${originalWord})\\b`, 'gi'); // set regular expression to replace words
-          let regularExp = new RegExp(`(?<=[^><]*)\\b(${originalWord})\\b(?=[^><]*<\/čč[b-z])`, 'gi'); // set regular expression to replace words
+          let regularExp = new RegExp(`(?<=<[^a][^<]*>[^><]*)\\b(${originalWord})\\b(?=[^><]*<)`, 'gi'); // set regular expression to replace words
           // console.log('about to find matches');
-          elementHtml = elementHtml.replace(regularExp, (match, g1, g2, g3) => {
+          console.log();
+          elementHtml = elementHtml.replace(regularExp, match => {
+            console.log(match);
+            console.log(elementHtml);
             changed = true;
             return `<mark data-flashcardid=${flashcard._id} class="masterlingo__marked-word">${match}</mark>`;
           }); // update element html
@@ -149,26 +150,6 @@ function runContentScript() {
     let alreadyHighlightedList = document.getElementsByClassName('masterlingo__marked-word');
     Array.from(alreadyHighlightedList).forEach(alreadyHighlighted => {
       alreadyHighlighted.addEventListener('click', handleMarkedWordClick);
-    });
-    // get rid of a tags styling, add classes
-    // filterAnchorsOut();
-  }
-
-  function filterAnchorsOut() {
-    let alreadyHighlightedList = document.getElementsByClassName('masterlingo__marked-word');
-    Array.from(alreadyHighlightedList).forEach(alreadyHighlighted => {
-      alreadyHighlighted.addEventListener('click', handleMarkedWordClick);
-    });
-    let listOfWords = document.getElementsByTagName('mark');
-    Array.from(listOfWords).forEach(curr => {
-      if (curr.textContent.endsWith(spanCode)) {
-        if (curr.parentNode.tagName !== 'A') {
-          console.log('got heree');
-          curr.className = 'masterlingo__marked-word';
-          curr.addEventListener('click', handleMarkedWordClick);
-        }
-        curr.textContent = curr.textContent.split('-')[0];
-      }
     });
   }
 
@@ -186,7 +167,6 @@ function runContentScript() {
       if (isNotClickInside && isNotWordClick) {
         console.log('clicked outside');
         translationBox.hide();
-        //the click was outside the specifiedElement, do something
       }
     });
 
@@ -267,24 +247,12 @@ function runContentScript() {
               function: 'flashcard',
               payload: { original, translations, inverted: false }
             },
-            id => {
-              console.log(id);
-              const flashcard = {
-                translations,
-                inverted: false,
-                original,
-                repetition: null,
-                schedule: null,
-                factor: null,
-                _id: id,
-                cannotRate: true,
-                originalLanguage: config.foreign,
-                translationLanguage: config.native
-              };
+            flashcard => {
+              console.log('this is the new flashcard');
+              console.log(flashcard);
+              flashcards.reviewFlashcards[flashcard._id] = { ...flashcard, cannotRate: true };
+              flashcards.allFlashcards[flashcard._id] = flashcard;
               updateHighlightedWords('add', flashcard);
-              flashcards.reviewFlashcards[id] = flashcard;
-              flashcards.allFlashcards[id] = flashcard;
-              console.log(flashcards);
             }
           );
         }

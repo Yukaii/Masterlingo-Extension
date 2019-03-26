@@ -8,8 +8,9 @@ mark {
     cursor: pointer;
     background-color: transparent;
     padding: 0;
+    transition: all 0.2s ease;
     &:hover {
-      color: #dba294 !important;
+      color: #e0c1b9 !important;
     }
   }
   &__translation-box {
@@ -144,7 +145,7 @@ mark {
   }
   &__translation-box,
   &__new-card-box {
-    transform: translate(-50%, -100%);
+    transform: translate(0%, -100%);
     &::after {
       clip-path: polygon(0 0, 100% 0, 50% 100%);
       top: 100%;
