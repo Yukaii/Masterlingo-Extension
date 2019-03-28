@@ -17,7 +17,10 @@ class newCardBox {
   }
 
   showButton(selection) {
-    console.log([selection.toString().trim()]);
+    let selectedText = selection.toString().trim();
+    if (selectedText.length < 1) {
+      return;
+    }
     let wordElement = selection.getRangeAt(0);
     if (!this.domSelector.contains(wordElement.commonAncestorContainer)) {
       console.log(wordElement);
@@ -30,7 +33,7 @@ class newCardBox {
       this.domSelector.innerHTML = `M<span>L</span>`;
       this.domSelector.style.transform = `translate(-50%, 100%)`;
 
-      this.term = selection.toString().trim();
+      this.term = selectedText;
       console.log('THIS IS THE TERM');
       console.log(this.term);
       this.stage = 'button';

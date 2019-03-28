@@ -232,17 +232,15 @@ mark {
   min-width: 250px;
   min-height: 110px; }
 
-.masterlingo__translation-box, .masterlingo__new-card-box {
-  transform: translate(0%, -100%); }
-  .masterlingo__translation-box::after, .masterlingo__new-card-box::after {
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-    top: 100%; }
+.masterlingo__translation-box::after, .masterlingo__new-card-box::after {
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  top: 100%; }
 
 .masterlingo__translation-box, .masterlingo__new-card-box, .masterlingo__new-card--button {
   position: absolute;
   display: none;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #444;
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  backface-visibility: hidden;
   box-sizing: border-box;
   border-radius: 4px;
   color: #444; }
@@ -273,7 +271,6 @@ mark {
   background-color: #013e87;
   color: #fe8f76;
   cursor: pointer;
-  transform: translate(-50%, 100%);
   transition: background-color 0.3s;
   font-family: 'Proxima Nova'; }
   .masterlingo__new-card--button:hover {

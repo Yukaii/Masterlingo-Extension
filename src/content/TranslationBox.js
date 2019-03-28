@@ -15,8 +15,6 @@ class TranslationBox {
   }
 
   initiate() {
-    const volumeIconSrc = chrome.extension.getURL('assets/volume.svg');
-    console.log(volumeIconSrc);
     console.log('initiating');
     const rateButtons = [
       { name: 'incorrect', quality: 1 },

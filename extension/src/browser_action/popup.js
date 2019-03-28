@@ -1,6 +1,10 @@
 console.log('hi there');
 const rootSelector = document.querySelector('#root');
 
+chrome.runtime.onMessage.addListener(() => {
+  console.log('got a message');
+});
+
 chrome.runtime.sendMessage({ method: 'get', function: 'config' }, function(response) {
   if (response.loggedIn) {
     rootSelector.innerHTML = `<div class="greeting"> Hi, ${

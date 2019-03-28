@@ -19249,7 +19249,10 @@ class newCardBox {
   }
 
   showButton(selection) {
-    console.log([selection.toString().trim()]);
+    let selectedText = selection.toString().trim();
+    if (selectedText.length < 1) {
+      return;
+    }
     let wordElement = selection.getRangeAt(0);
     if (!this.domSelector.contains(wordElement.commonAncestorContainer)) {
       console.log(wordElement);
@@ -19262,7 +19265,7 @@ class newCardBox {
       this.domSelector.innerHTML = `M<span>L</span>`;
       this.domSelector.style.transform = `translate(-50%, 100%)`;
 
-      this.term = selection.toString().trim();
+      this.term = selectedText;
       console.log('THIS IS THE TERM');
       console.log(this.term);
       this.stage = 'button';
@@ -19415,8 +19418,6 @@ class TranslationBox {
   }
 
   initiate() {
-    const volumeIconSrc = chrome.extension.getURL('assets/volume.svg');
-    console.log(volumeIconSrc);
     console.log('initiating');
     const rateButtons = [
       { name: 'incorrect', quality: 1 },
@@ -19574,22 +19575,9 @@ function runContentScript() {
     }
   }
 
-  function stopForHomePage() {
-    if (window.location.href.includes('https://masterlingoapp.com')) {
-      console.log('met condition');
-      chrome.runtime.sendMessage({ method: 'get', function: 'login' }, response => {
-        console.log('got response');
-        console.log(response);
-      });
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   async function init() {
     console.log(document.documentElement.lang);
-    if (stopForHomePage() || stopForLanguage()) {
+    if (stopForLanguage()) {
       // on maasterlingoapp.com or different language
       return;
     }
@@ -19651,19 +19639,22 @@ function runContentScript() {
         let originalWords = flashcard.inverted ? flashcard.translations : flashcard.original;
 
         originalWords.forEach(originalWord => {
-          if (noDuplicatesArray.includes(originalWord)) {
+          const specialCharCheck = /[!@#$%^&*(),.?":{}|<>]/g;
+
+          if (
+            noDuplicatesArray.includes(originalWord) ||
+            specialCharCheck.test(originalWord) ||
+            originalWord.length < 2
+          ) {
             return;
           } else {
             noDuplicatesArray.push(originalWord);
           }
           // loop over all words in card
           // let regularExp = new RegExp(`\\b(${originalWord})\\b`, 'gi'); // set regular expression to replace words
-          let regularExp = new RegExp(`(?<=<[^a][^<]*>[^><]*)\\b(${originalWord})\\b(?=[^><]*<)`, 'gi'); // set regular expression to replace words
+          let regularExp = new RegExp(`(?<=<[^at][^<]*>[^><]*)\\b(${originalWord})\\b(?=[^><]*<)`, 'gi'); // set regular expression to replace words
           // console.log('about to find matches');
-          console.log();
           elementHtml = elementHtml.replace(regularExp, match => {
-            console.log(match);
-            console.log(elementHtml);
             changed = true;
             return `<mark data-flashcardid=${flashcard._id} class="masterlingo__marked-word">${match}</mark>`;
           }); // update element html
@@ -19693,6 +19684,12 @@ function runContentScript() {
       if (isNotClickInside && isNotWordClick) {
         console.log('clicked outside');
         translationBox.hide();
+      }
+    });
+
+    document.addEventListener('keydown', () => {
+      if (newCardBox.stage === 'button') {
+        newCardBox.hide();
       }
     });
 

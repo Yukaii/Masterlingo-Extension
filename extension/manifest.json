@@ -35,7 +35,8 @@
     {
       "matches": ["<all_urls>"],
       "css": ["css/style.css"],
-      "js": ["src/content/content.js"]
+      "js": ["src/content/content.js"],
+      "exclude_matches": ["https://masterlingoapp.com/*"]
     }
   ],
   "web_accessible_resources": [
@@ -44,5 +45,8 @@
     "assets/fonts/*.woff2",
     "assets/fonts/*.eot",
     "assets/fonts/*.ttf"
-  ]
+  ],
+  "externally_connectable": {
+    "matches": ["https://masterlingoapp.com/*", "http://localhost:3000/*"]
+  }
 }

@@ -145,7 +145,7 @@ mark {
   }
   &__translation-box,
   &__new-card-box {
-    transform: translate(0%, -100%);
+    // transform: translate(0%, -100%);
     &::after {
       clip-path: polygon(0 0, 100% 0, 50% 100%);
       top: 100%;
@@ -156,8 +156,8 @@ mark {
   &__new-card--button {
     position: absolute;
     display: none;
-    @include box-shadow-1;
-    border: 1px solid $color-grey-dark-1;
+    @include box-shadow-2;
+    backface-visibility: hidden;
     box-sizing: border-box;
     border-radius: $border-radius;
     color: $color-grey-dark-1;
@@ -191,7 +191,6 @@ mark {
     background-color: $color-blue;
     color: $color-red-light;
     cursor: pointer;
-    transform: translate(-50%, 100%);
     transition: background-color 0.3s;
     font-family: 'Proxima Nova';
     &:hover {
