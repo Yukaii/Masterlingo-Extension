@@ -19178,12 +19178,9 @@ class Flashcards {
   }
   async getFlashcards() {
     const result = await _msLingoApi__WEBPACK_IMPORTED_MODULE_0__["default"].getFlashcards();
-    console.log('this is the result');
-    console.log(result);
     if (result) {
       this.reviewFlashcards = result.reviewFlashcards;
       this.allFlashcards = result.allFlashcards;
-      console.log(result);
     }
   }
   updateFlashcard(flashcard) {
@@ -19239,10 +19236,8 @@ async function init() {
     config.native = user.native;
     config.foreign = user.foreign;
     config.username = user.name;
-    console.log(user);
     await flashcards.getFlashcards();
   } else {
-    console.log('could not log in');
   }
   addListeners();
   return config;
@@ -19255,6 +19250,7 @@ function addListeners() {
 }
 
 function handleMessages(request, sender, sendResponse) {
+  console.log('got message');
   console.log(request);
   switch (request.method) {
     case 'get':
@@ -19263,8 +19259,6 @@ function handleMessages(request, sender, sendResponse) {
           sendResponse(config);
           break;
         case 'flashcards':
-          console.log('bg script sending cards');
-          console.log(flashcards);
           sendResponse({ ...flashcards });
           break;
         case 'translations':
@@ -19278,10 +19272,6 @@ function handleMessages(request, sender, sendResponse) {
             });
           return true;
         case 'login':
-          if (config.loggedIn) {
-            sendResponse(config);
-            break;
-          }
           init().then(config => {
             if (config) {
               sendResponse(config);
@@ -19319,11 +19309,9 @@ function handleMessages(request, sender, sendResponse) {
             _msLingoApi__WEBPACK_IMPORTED_MODULE_1__["default"]
               .upadateFlashcardSrs(request.payload)
               .then(response => {
-                console.log(response);
                 sendResponse(response);
               })
               .catch(err => {
-                console.log(err);
                 sendResponse(err);
               });
             return true;
@@ -19344,10 +19332,7 @@ function handleMessages(request, sender, sendResponse) {
           sendResponse('flashcards in bg script successfully updated');
           break;
         case 'config':
-          console.log(request.payload);
-          console.log('config update');
           config = { ...config, ...request.payload.data };
-          console.log(config);
           sendResponse('successs');
           break;
         default:
@@ -19358,11 +19343,8 @@ function handleMessages(request, sender, sendResponse) {
     case 'delete':
       switch (request.function) {
         case 'flashcard':
-          console.log('about to delete a flashcard');
-          console.log(flashcards.reviewFlashcards);
           flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.omit(flashcards.reviewFlashcards, request.payload._id);
           flashcards.allFlashcards = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.omit(flashcards.allFlashcards, request.payload._id);
-          console.log(flashcards.reviewFlashcards);
           _msLingoApi__WEBPACK_IMPORTED_MODULE_1__["default"]
             .deleteFlashcard(request.payload)
             .then(() => {
@@ -19380,30 +19362,39 @@ function handleMessages(request, sender, sendResponse) {
     case 'post':
       switch (request.function) {
         case 'flashcard':
-          _msLingoApi__WEBPACK_IMPORTED_MODULE_1__["default"].createFlashcard(request.payload).then(data => {
-            if (data[0]) {
-              const id = data[0];
-              const flashcard = {
-                translations: request.payload.translations,
-                inverted: false,
-                original: request.payload.original,
-                repetition: null,
-                schedule: null,
-                factor: null,
-                _id: id,
-                cannotRate: false,
-                originalLanguage: config.foreign,
-                translationLanguage: config.native
-              };
-              console.log('this is the new flashcard');
-              console.log(flashcard);
-              flashcards.reviewFlashcards[id] = flashcard;
-              flashcards.allFlashcards[id] = flashcard;
-              sendResponse(flashcard);
-            }
-            sendResponse(false);
-          });
+          if (!request.offline) {
+            _msLingoApi__WEBPACK_IMPORTED_MODULE_1__["default"].createFlashcard(request.payload).then(data => {
+              if (data[0]) {
+                const id = data[0];
+                const flashcard = {
+                  translations: request.payload.translations,
+                  inverted: false,
+                  original: request.payload.original,
+                  repetition: null,
+                  schedule: null,
+                  factor: null,
+                  _id: id,
+                  cannotRate: false,
+                  originalLanguage: config.foreign,
+                  translationLanguage: config.native
+                };
+                flashcards.reviewFlashcards[id] = flashcard;
+                flashcards.allFlashcards[id] = flashcard;
+                sendResponse(flashcard);
+              }
+              sendResponse(false);
+            });
+          } else {
+            init().then(config => {
+              if (config) {
+                sendResponse(config);
+              } else {
+                sendResponse(false);
+              }
+            });
+          }
           return true;
+
         default:
           sendResponse('invalid function');
           break;
@@ -19440,13 +19431,10 @@ const masterLingoApi = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
 
 async function login() {
   const result = await masterLingoApi.get('/login');
-  console.log(result);
   const user = result.data;
   if (user) {
-    console.log('logged in');
     return user;
   } else {
-    console.log(`couldn't log in`);
     return false;
   }
 }
@@ -19475,15 +19463,12 @@ async function updateFlashcard(flashcard) {
 }
 
 async function upadateFlashcardSrs(flashcard) {
-  console.log(flashcard);
-  console.log('sending flashcard to srs update');
   const response = await masterLingoApi.put(`/srs/${flashcard._id}`, {
     repetition: flashcard.repetition,
     dueDate: flashcard.dueDate,
     schedule: flashcard.schedule,
     factor: flashcard.factor
   });
-  console.log(response);
 }
 
 async function deleteFlashcard(flashcard) {
@@ -19510,7 +19495,6 @@ async function getTranslations(word) {
       inverted: false
     }
   });
-  console.log(result);
   if (result.data) {
     return result.data;
   } else {

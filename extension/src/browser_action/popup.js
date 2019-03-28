@@ -1,9 +1,6 @@
-console.log('hi there');
 const rootSelector = document.querySelector('#root');
 
-chrome.runtime.onMessage.addListener(() => {
-  console.log('got a message');
-});
+chrome.runtime.onMessage.addListener(() => {});
 
 chrome.runtime.sendMessage({ method: 'get', function: 'config' }, function(response) {
   if (response.loggedIn) {
@@ -17,7 +14,6 @@ chrome.runtime.sendMessage({ method: 'get', function: 'config' }, function(respo
       </div>
     `;
   } else {
-    console.log(rootSelector);
     rootSelector.innerHTML = `<div class="logo">Master<span>Lingo</span></div><div class="sign-in"> Sign in to start using the extension. </div><a href="https://masterlingoapp.com/auth/google" class="button log-in">Sign in</a>`;
     document.querySelector('.log-in').addEventListener('click', () => {
       logIn();

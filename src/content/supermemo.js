@@ -23,11 +23,8 @@ function supermemo(quality, { schedule, factor, repetition }) {
     newFactor = 2.5;
   } else {
     newRepetition = repetition + 1;
-    console.log('got here');
-    console.log(newRepetition);
   }
   if (quality < 3) {
-    console.log('quality under 3');
     newRepetition = 0;
     curSchedule = 0;
 
@@ -37,7 +34,6 @@ function supermemo(quality, { schedule, factor, repetition }) {
   } else {
     if (lastFactor) {
       newFactor = calcFactor(lastFactor, quality);
-      console.log(`new factor is ${newFactor}`);
     }
     curSchedule = Math.round(lastSchedule * newFactor);
   }
@@ -51,7 +47,6 @@ function supermemo(quality, { schedule, factor, repetition }) {
   }
   let dueDate = new Date();
   if (quality >= 3) {
-    console.log('1b');
     if (quality === 5) {
       curSchedule = Math.round(curSchedule * 1.4);
     }
@@ -59,7 +54,6 @@ function supermemo(quality, { schedule, factor, repetition }) {
     // only 1/2 of current schedule gets added compared to the app version where 100% gets added
   }
 
-  console.log('before return' + newRepetition);
   return {
     factor: newFactor,
     schedule: curSchedule,

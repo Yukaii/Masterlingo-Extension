@@ -19255,7 +19255,6 @@ class newCardBox {
     }
     let wordElement = selection.getRangeAt(0);
     if (!this.domSelector.contains(wordElement.commonAncestorContainer)) {
-      console.log(wordElement);
       this.wordElement = wordElement;
       this.domSelector.style.display = 'flex';
       this.domSelector.classList.remove('masterlingo__new-card--translations');
@@ -19266,14 +19265,11 @@ class newCardBox {
       this.domSelector.style.transform = `translate(-50%, 100%)`;
 
       this.term = selectedText;
-      console.log('THIS IS THE TERM');
-      console.log(this.term);
       this.stage = 'button';
     }
   }
 
   async showTranslations(foreign) {
-    console.log('STARTING TRANSLATIONS');
     let translationsHTML;
 
     this.stage = 'translations';
@@ -19297,10 +19293,7 @@ class newCardBox {
     chrome.runtime.sendMessage({ method: 'get', function: 'translations', payload: this.term }, response => {
       if (!response) return;
       const data = response;
-      console.log(data);
-      console.log('got past promise');
       if (data.translations && !data.error && data.invertable) {
-        console.log(data);
         translationsHTML = data.translations.slice(0, 6).map(translation => {
           return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
         });
@@ -19312,7 +19305,6 @@ class newCardBox {
         }</div><i class="material-icons masterlingo__volume-icon--new">volume_up</i></div>${translationsHTML.join(
           ''
         )}</div>`;
-        console.log(this.term.length);
         if (this.term.length > 25) {
           document.querySelector('.masterlingo__new-card--term').style.fontSize = '17px';
         } else {
@@ -19364,7 +19356,6 @@ class newCardBox {
     if (wordOffset.top - window.scrollY < 200) {
       this.flip = true;
       this.height = wordOffset.height;
-      console.log('flipping');
     } else {
       this.flip = false;
     }
@@ -19374,7 +19365,6 @@ class newCardBox {
 
   getOffset(element) {
     const rect = element.getBoundingClientRect();
-    console.log(rect);
     return {
       left: rect.left + window.scrollX,
       top: rect.top + window.scrollY,
@@ -19418,7 +19408,6 @@ class TranslationBox {
   }
 
   initiate() {
-    console.log('initiating');
     const rateButtons = [
       { name: 'incorrect', quality: 1 },
       { name: 'correct', quality: 4 },
@@ -19437,11 +19426,9 @@ class TranslationBox {
   }
 
   show(wordElement, flashcard) {
-    console.log('about to show');
     this.setPosition(wordElement);
     this.domSelector.classList.remove('masterlingo__flip-after');
 
-    console.log(flashcard);
     if (!flashcard) return;
     this.domSelector.classList.add(this.activeClass);
     if (this.flip) {
@@ -19458,8 +19445,6 @@ class TranslationBox {
     } else if (translations.length > 18) {
       fontSize = 22;
     }
-    console.log('changing font size');
-    console.log(fontSize);
     if (flashcard.cannotRate) {
       this.ratingsDomSelector.style.display = 'none';
     } else {
@@ -19468,7 +19453,6 @@ class TranslationBox {
     this.translationsDomSelector.style.fontSize = fontSize + 'px';
     this.translationsDomSelector.textContent = translations;
     this.currentFlashcard = flashcard;
-    console.log(flashcard);
     if (this.config.autoAudio) Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_1__["default"])(original, flashcard.originalLanguage);
     document.querySelector('.masterlingo__volume-icon').addEventListener('click', () => {
       Object(_responsiveVoice__WEBPACK_IMPORTED_MODULE_1__["default"])(original, flashcard.originalLanguage);
@@ -19487,7 +19471,6 @@ class TranslationBox {
     if (wordOffset.top - window.scrollY < 200) {
       this.flip = true;
       this.height = wordOffset.height;
-      console.log('flipping');
     } else {
       this.flip = false;
     }
@@ -19530,15 +19513,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-console.log(window.location.href);
-
 function runContentScript() {
   let config = {
       native: '',
       foreign: '',
       loggedIn: false,
-      highlightElements: 'paragraphs',
-      activePages: 'targetLanguage',
+      highlightElements: 'all',
+      activePages: 'all',
       autoAudio: true
     },
     flashcards,
@@ -19549,12 +19530,8 @@ function runContentScript() {
     if (document.readyState === 'complete') {
       clearInterval(readyStateCheckInterval);
 
-      console.log('Hello. This message was sent from scripts/inject.js');
-      // ----------------------------------------------------------
-
       chrome.runtime.sendMessage({ method: 'get', function: 'config' }, function(response) {
         if (response) {
-          console.log(response);
           config = { ...config, foreign: response.foreign, native: response.native, loggedIn: true };
           getConfig();
         }
@@ -19566,9 +19543,9 @@ function runContentScript() {
     if (
       config.activePages === 'targetLanguage' &&
       !document.documentElement.lang.includes(config.foreign) &&
-      document.documentElement.lang
+      document.documentElement.lang &&
+      document.documentElement.lang.trim().length > 1
     ) {
-      console.log('this page is not in target language, stop content script');
       return true;
     } else {
       return false;
@@ -19576,7 +19553,6 @@ function runContentScript() {
   }
 
   async function init() {
-    console.log(document.documentElement.lang);
     if (stopForLanguage()) {
       // on maasterlingoapp.com or different language
       return;
@@ -19616,12 +19592,9 @@ function runContentScript() {
     // get flashcards from bg script
     chrome.runtime.sendMessage({ method: 'get', function: 'flashcards' }, response => {
       if (response) {
-        console.log('response is:');
-        console.log(response);
         flashcards = response;
         highlightPageWords(flashcards.reviewFlashcards);
       } else {
-        console.log(`couldn't get flashcards`);
       }
     });
   }
@@ -19640,20 +19613,19 @@ function runContentScript() {
 
         originalWords.forEach(originalWord => {
           const specialCharCheck = /[!@#$%^&*(),.?":{}|<>]/g;
-
+          const forbiddenWords = ['script', 'div', 'span', 'p', 'a', 'header'];
           if (
             noDuplicatesArray.includes(originalWord) ||
             specialCharCheck.test(originalWord) ||
-            originalWord.length < 2
+            originalWord.length < 2 ||
+            forbiddenWords.includes(originalWord.toLowerCase())
           ) {
             return;
           } else {
             noDuplicatesArray.push(originalWord);
           }
           // loop over all words in card
-          // let regularExp = new RegExp(`\\b(${originalWord})\\b`, 'gi'); // set regular expression to replace words
           let regularExp = new RegExp(`(?<=<[^at][^<]*>[^><]*)\\b(${originalWord})\\b(?=[^><]*<)`, 'gi'); // set regular expression to replace words
-          // console.log('about to find matches');
           elementHtml = elementHtml.replace(regularExp, match => {
             changed = true;
             return `<mark data-flashcardid=${flashcard._id} class="masterlingo__marked-word">${match}</mark>`;
@@ -19682,7 +19654,6 @@ function runContentScript() {
       let isNotClickInside = !translationBox.domSelector.contains(event.target),
         isNotWordClick = !event.target.classList.contains('masterlingo__marked-word');
       if (isNotClickInside && isNotWordClick) {
-        console.log('clicked outside');
         translationBox.hide();
       }
     });
@@ -19694,9 +19665,7 @@ function runContentScript() {
     });
 
     function updateBgFlashcards(method, flashcard, quality = null) {
-      chrome.runtime.sendMessage({ method, function: 'flashcard', payload: flashcard, quality }, response => {
-        console.log('bg said' + response);
-      });
+      chrome.runtime.sendMessage({ method, function: 'flashcard', payload: flashcard, quality }, response => {});
     }
 
     function updateHighlightedWords(method, flashcard) {
@@ -19705,7 +19674,6 @@ function runContentScript() {
           let highlightedWords = document.getElementsByClassName('masterlingo__marked-word');
           Array.from(highlightedWords).forEach(element => {
             if (element.dataset.flashcardid === flashcard._id) {
-              console.log('found a match');
               element.outerHTML = element.innerHTML;
             }
           });
@@ -19719,15 +19687,11 @@ function runContentScript() {
     Array.from(document.getElementsByClassName('masterlingo__rating-button')).forEach(button => {
       button.addEventListener('click', async e => {
         translationBox.hide();
-        console.log(translationBox.currentFlashcard);
         if (translationBox.currentFlashcard._id) {
-          console.log('rated!');
           // handle card rating click
-          console.log(translationBox.flashcards);
           const quality = e.target.id.split('-')[1];
           const flashcardId = translationBox.currentFlashcard._id;
           const supermemoResults = Object(_supermemo__WEBPACK_IMPORTED_MODULE_2__["default"])(quality, translationBox.currentFlashcard);
-          console.log(flashcards);
           if (quality > 3) {
             updateHighlightedWords('delete', translationBox.currentFlashcard);
             flashcards.reviewFlashcards = lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(flashcards.reviewFlashcards, flashcardId);
@@ -19737,33 +19701,30 @@ function runContentScript() {
               ...lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(supermemoResults, 'isRepeatAgain'),
               cannotRate: true
             };
-            console.log(flashcards.reviewFlashcards._id);
           }
           flashcards.allFlashcards[flashcardId] = {
             ...translationBox.currentFlashcard,
             ...lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(supermemoResults, 'isRepeatAgain'),
             cannotRate: true
           };
-          console.log(translationBox.currentFlashcard);
           updateBgFlashcards(
             'put',
             { ...translationBox.currentFlashcard, ...lodash__WEBPACK_IMPORTED_MODULE_3___default.a.omit(supermemoResults, 'isRepeatAgain') },
             quality
           );
-          console.log('UPDATING BG FLASHCARDS');
         }
       });
     });
 
     function handleClickOutside(e) {
-      console.log('handleClick outside');
+      console.log(e);
+      console.log(window.getSelection().toString().length);
       const isNotClickInside = !newCardBox.domSelector.contains(e.target);
-      if (isNotClickInside && window.getSelection().toString.length < 1 && e.target.textContent !== 'L') {
+      if (isNotClickInside && window.getSelection().toString().length < 1 && e.target.textContent !== 'L') {
         document.removeEventListener('click', handleClickOutside);
         if (newCardBox.translationsToSave.length > 0) {
           const translations = newCardBox.translationsToSave,
             original = [newCardBox.term.trim()];
-          console.log('about to send a message');
           chrome.runtime.sendMessage(
             {
               method: 'post',
@@ -19771,8 +19732,6 @@ function runContentScript() {
               payload: { original, translations, inverted: false }
             },
             flashcard => {
-              console.log('this is the new flashcard');
-              console.log(flashcard);
               flashcards.reviewFlashcards[flashcard._id] = { ...flashcard, cannotRate: true };
               flashcards.allFlashcards[flashcard._id] = flashcard;
               updateHighlightedWords('add', flashcard);
@@ -19785,7 +19744,6 @@ function runContentScript() {
 
     document.addEventListener('mouseup', function(e) {
       let selection = window.getSelection(); //get the text range
-      console.log('this is the ancestor');
       if (selection.toString()) {
         newCardBox.showButton(selection);
         setTimeout(() => {
@@ -19794,12 +19752,28 @@ function runContentScript() {
       }
     });
 
+    let mouseDown = false;
+    document.body.onmousedown = function() {
+      mouseDown = true;
+    };
+    document.body.onmouseup = function() {
+      mouseDown = false;
+    };
+
+    document.addEventListener('selectionchange', () => {
+      let selection = window.getSelection(); //get the text range
+      if (selection.toString() && !mouseDown) {
+        newCardBox.showButton(selection);
+        setTimeout(() => {
+          document.addEventListener('click', handleClickOutside);
+        }, 500);
+      }
+    });
+
     function checkForExisting(term) {
-      console.log('heree2');
       let card;
       Object.values(flashcards.allFlashcards).forEach(flashcard => {
         let textArray = flashcard.inverted ? flashcard.translations : flashcard.original;
-        console.log(term);
         let tempCard = flashcard;
         textArray.forEach(word => {
           if (word.toLowerCase() === term.toLowerCase()) {
@@ -19811,9 +19785,7 @@ function runContentScript() {
     }
     newCardBox.domSelector.addEventListener('click', e => {
       if (newCardBox.stage === 'button') {
-        console.log('clicked button');
         const existingFlashcard = checkForExisting(newCardBox.term);
-        console.log('does card exist?');
         if (existingFlashcard) {
           const wordElement = newCardBox.wordElement;
           newCardBox.hide();
@@ -19829,7 +19801,6 @@ function runContentScript() {
     });
     document.querySelector('.masterlingo__delete-icon').addEventListener('click', () => {
       if (confirm('Are you sure you want to delete this card?')) {
-        console.log('removing');
         const { currentFlashcard } = translationBox;
         translationBox.hide();
         updateHighlightedWords('delete', currentFlashcard);
@@ -21697,11 +21668,8 @@ function supermemo(quality, { schedule, factor, repetition }) {
     newFactor = 2.5;
   } else {
     newRepetition = repetition + 1;
-    console.log('got here');
-    console.log(newRepetition);
   }
   if (quality < 3) {
-    console.log('quality under 3');
     newRepetition = 0;
     curSchedule = 0;
 
@@ -21711,7 +21679,6 @@ function supermemo(quality, { schedule, factor, repetition }) {
   } else {
     if (lastFactor) {
       newFactor = calcFactor(lastFactor, quality);
-      console.log(`new factor is ${newFactor}`);
     }
     curSchedule = Math.round(lastSchedule * newFactor);
   }
@@ -21725,7 +21692,6 @@ function supermemo(quality, { schedule, factor, repetition }) {
   }
   let dueDate = new Date();
   if (quality >= 3) {
-    console.log('1b');
     if (quality === 5) {
       curSchedule = Math.round(curSchedule * 1.4);
     }
@@ -21733,7 +21699,6 @@ function supermemo(quality, { schedule, factor, repetition }) {
     // only 1/2 of current schedule gets added compared to the app version where 100% gets added
   }
 
-  console.log('before return' + newRepetition);
   return {
     factor: newFactor,
     schedule: curSchedule,

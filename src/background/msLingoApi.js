@@ -7,13 +7,10 @@ const masterLingoApi = axios.create({
 
 async function login() {
   const result = await masterLingoApi.get('/login');
-  console.log(result);
   const user = result.data;
   if (user) {
-    console.log('logged in');
     return user;
   } else {
-    console.log(`couldn't log in`);
     return false;
   }
 }
@@ -42,15 +39,12 @@ async function updateFlashcard(flashcard) {
 }
 
 async function upadateFlashcardSrs(flashcard) {
-  console.log(flashcard);
-  console.log('sending flashcard to srs update');
   const response = await masterLingoApi.put(`/srs/${flashcard._id}`, {
     repetition: flashcard.repetition,
     dueDate: flashcard.dueDate,
     schedule: flashcard.schedule,
     factor: flashcard.factor
   });
-  console.log(response);
 }
 
 async function deleteFlashcard(flashcard) {
@@ -77,7 +71,6 @@ async function getTranslations(word) {
       inverted: false
     }
   });
-  console.log(result);
   if (result.data) {
     return result.data;
   } else {

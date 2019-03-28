@@ -23,8 +23,8 @@ function restoreOptions() {
   chrome.storage.sync.get(
     {
       autoAudio: true,
-      activePages: 'targetLanguage',
-      highlightElements: 'paragraphs'
+      activePages: 'all',
+      highlightElements: 'all'
     },
     function(settings) {
       console.log(settings);

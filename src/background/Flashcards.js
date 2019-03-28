@@ -8,12 +8,9 @@ class Flashcards {
   }
   async getFlashcards() {
     const result = await mslApi.getFlashcards();
-    console.log('this is the result');
-    console.log(result);
     if (result) {
       this.reviewFlashcards = result.reviewFlashcards;
       this.allFlashcards = result.allFlashcards;
-      console.log(result);
     }
   }
   updateFlashcard(flashcard) {

@@ -23,7 +23,6 @@ class newCardBox {
     }
     let wordElement = selection.getRangeAt(0);
     if (!this.domSelector.contains(wordElement.commonAncestorContainer)) {
-      console.log(wordElement);
       this.wordElement = wordElement;
       this.domSelector.style.display = 'flex';
       this.domSelector.classList.remove('masterlingo__new-card--translations');
@@ -34,14 +33,11 @@ class newCardBox {
       this.domSelector.style.transform = `translate(-50%, 100%)`;
 
       this.term = selectedText;
-      console.log('THIS IS THE TERM');
-      console.log(this.term);
       this.stage = 'button';
     }
   }
 
   async showTranslations(foreign) {
-    console.log('STARTING TRANSLATIONS');
     let translationsHTML;
 
     this.stage = 'translations';
@@ -65,10 +61,7 @@ class newCardBox {
     chrome.runtime.sendMessage({ method: 'get', function: 'translations', payload: this.term }, response => {
       if (!response) return;
       const data = response;
-      console.log(data);
-      console.log('got past promise');
       if (data.translations && !data.error && data.invertable) {
-        console.log(data);
         translationsHTML = data.translations.slice(0, 6).map(translation => {
           return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
         });
@@ -80,7 +73,6 @@ class newCardBox {
         }</div><i class="material-icons masterlingo__volume-icon--new">volume_up</i></div>${translationsHTML.join(
           ''
         )}</div>`;
-        console.log(this.term.length);
         if (this.term.length > 25) {
           document.querySelector('.masterlingo__new-card--term').style.fontSize = '17px';
         } else {
@@ -132,7 +124,6 @@ class newCardBox {
     if (wordOffset.top - window.scrollY < 200) {
       this.flip = true;
       this.height = wordOffset.height;
-      console.log('flipping');
     } else {
       this.flip = false;
     }
@@ -142,7 +133,6 @@ class newCardBox {
 
   getOffset(element) {
     const rect = element.getBoundingClientRect();
-    console.log(rect);
     return {
       left: rect.left + window.scrollX,
       top: rect.top + window.scrollY,

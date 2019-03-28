@@ -15,7 +15,6 @@ class TranslationBox {
   }
 
   initiate() {
-    console.log('initiating');
     const rateButtons = [
       { name: 'incorrect', quality: 1 },
       { name: 'correct', quality: 4 },
@@ -34,11 +33,9 @@ class TranslationBox {
   }
 
   show(wordElement, flashcard) {
-    console.log('about to show');
     this.setPosition(wordElement);
     this.domSelector.classList.remove('masterlingo__flip-after');
 
-    console.log(flashcard);
     if (!flashcard) return;
     this.domSelector.classList.add(this.activeClass);
     if (this.flip) {
@@ -55,8 +52,6 @@ class TranslationBox {
     } else if (translations.length > 18) {
       fontSize = 22;
     }
-    console.log('changing font size');
-    console.log(fontSize);
     if (flashcard.cannotRate) {
       this.ratingsDomSelector.style.display = 'none';
     } else {
@@ -65,7 +60,6 @@ class TranslationBox {
     this.translationsDomSelector.style.fontSize = fontSize + 'px';
     this.translationsDomSelector.textContent = translations;
     this.currentFlashcard = flashcard;
-    console.log(flashcard);
     if (this.config.autoAudio) textToSpeech(original, flashcard.originalLanguage);
     document.querySelector('.masterlingo__volume-icon').addEventListener('click', () => {
       textToSpeech(original, flashcard.originalLanguage);
@@ -84,7 +78,6 @@ class TranslationBox {
     if (wordOffset.top - window.scrollY < 200) {
       this.flip = true;
       this.height = wordOffset.height;
-      console.log('flipping');
     } else {
       this.flip = false;
     }
