@@ -40,9 +40,15 @@ function handleMessages(request, sender, sendResponse) {
           sendResponse(config);
           break;
         case 'flashcards':
+          if (!config.loggedIn) {
+            sendResponse('you need to log in first');
+          }
           sendResponse({ ...flashcards });
           break;
         case 'translations':
+          if (!config.loggedIn) {
+            sendResponse('you need to log in first');
+          }
           mslApi
             .getTranslations(request.payload)
             .then(response => {
@@ -77,6 +83,9 @@ function handleMessages(request, sender, sendResponse) {
       }
       break;
     case 'put':
+      if (!config.loggedIn) {
+        sendResponse('you need to log in first');
+      }
       switch (request.function) {
         case 'flashcard':
           const id = request.payload._id;
@@ -100,7 +109,6 @@ function handleMessages(request, sender, sendResponse) {
             sendResponse('success');
             break;
           }
-          break;
         case 'flashcards':
           const receivedFlashcards = request.payload;
           let reviewFlashcards = receivedFlashcards.filter(card => {
@@ -122,6 +130,9 @@ function handleMessages(request, sender, sendResponse) {
       }
       break;
     case 'delete':
+      if (!config.loggedIn) {
+        sendResponse('you need to log in first');
+      }
       switch (request.function) {
         case 'flashcard':
           flashcards.reviewFlashcards = _.omit(flashcards.reviewFlashcards, request.payload._id);
@@ -141,6 +152,9 @@ function handleMessages(request, sender, sendResponse) {
       }
       break;
     case 'post':
+      if (!config.loggedIn) {
+        sendResponse('you need to log in first');
+      }
       switch (request.function) {
         case 'flashcard':
           if (!request.offline) {

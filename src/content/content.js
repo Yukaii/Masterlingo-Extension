@@ -66,8 +66,8 @@ function runContentScript() {
     chrome.storage.sync.get(
       {
         autoAudio: true,
-        activePages: 'targetLanguage',
-        highlightElements: 'paragraphs'
+        activePages: 'all',
+        highlightElements: 'all'
       },
       function(settings) {
         config.autoAudio = settings.autoAudio;

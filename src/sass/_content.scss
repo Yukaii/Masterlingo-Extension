@@ -9,6 +9,9 @@ mark {
     background-color: transparent;
     padding: 0;
     transition: all 0.2s ease;
+    text-transform: inherit !important;
+    font-style: inherit !important;
+    font-weight: inherit !important;
     &:hover {
       color: #e0c1b9 !important;
     }
@@ -193,6 +196,7 @@ mark {
     cursor: pointer;
     transition: background-color 0.3s;
     font-family: 'Proxima Nova';
+
     &:hover {
       background-color: lighten($color-blue, 5);
     }
@@ -264,6 +268,7 @@ mark {
     grid-template-columns: repeat(3, 1fr);
     height: 27px;
     box-sizing: border-box;
+
     & > div {
       z-index: 0;
       cursor: pointer;
@@ -286,6 +291,7 @@ mark {
   &__rating-button {
     &--incorrect {
       background-color: $color-red-light-2;
+      border-bottom-left-radius: $border-radius;
       &:hover {
         background-color: $color-red-light;
       }
@@ -298,6 +304,8 @@ mark {
     }
     &--easy {
       background-color: $color-blue-light;
+      border-bottom-right-radius: $border-radius;
+
       &:hover {
         background-color: $color-blue;
       }

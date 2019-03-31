@@ -112,7 +112,10 @@ mark {
   cursor: pointer;
   background-color: transparent;
   padding: 0;
-  transition: all 0.2s ease; }
+  transition: all 0.2s ease;
+  text-transform: inherit !important;
+  font-style: inherit !important;
+  font-weight: inherit !important; }
   .masterlingo__marked-word:hover {
     color: #e0c1b9 !important; }
 
@@ -349,7 +352,8 @@ mark {
       color: #fff; }
 
 .masterlingo__rating-button--incorrect {
-  background-color: #ffeae5; }
+  background-color: #ffeae5;
+  border-bottom-left-radius: 4px; }
   .masterlingo__rating-button--incorrect:hover {
     background-color: #fe8f76; }
 
@@ -359,6 +363,7 @@ mark {
     background-color: #25dea0; }
 
 .masterlingo__rating-button--easy {
-  background-color: #d5e8ff; }
+  background-color: #d5e8ff;
+  border-bottom-right-radius: 4px; }
   .masterlingo__rating-button--easy:hover {
     background-color: #013e87; }

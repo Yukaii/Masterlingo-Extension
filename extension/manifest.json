@@ -2,8 +2,8 @@
   "name": "Masterlingo",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "This extension was created with the awesome extensionizr.com",
-  "homepage_url": "http://extensionizr.com",
+  "description": "Learn languages as you scroll. The easiest, most convinient way of using flashcards and srs to acquire vocabulary - right in any webpage.",
+  "homepage_url": "https://masterlingoapp.com",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png"
@@ -36,7 +36,7 @@
       "matches": ["<all_urls>"],
       "css": ["css/style.css"],
       "js": ["src/content/content.js"],
-      "exclude_matches": ["https://masterlingoapp.com/*"]
+      "exclude_matches": ["https://masterlingoapp.com/*", "https://www.youtube.com/*", "https://www.instagram.com/*"]
     }
   ],
   "web_accessible_resources": [
