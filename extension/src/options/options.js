@@ -2,12 +2,14 @@ function saveOptions() {
   const autoAudio = document.getElementById('autoAudio').checked,
     activePages = document.getElementById('activePages').value,
     highlightElements = document.getElementById('highlightElements').value;
+  modifier = document.getElementById('modifier').value;
   console.log(autoAudio);
   chrome.storage.sync.set(
     {
       autoAudio,
       activePages,
-      highlightElements
+      highlightElements,
+      modifier
     },
     function() {
       console.log('successfully saved');
@@ -24,13 +26,15 @@ function restoreOptions() {
     {
       autoAudio: true,
       activePages: 'all',
-      highlightElements: 'all'
+      highlightElements: 'all',
+      modifier: 'none'
     },
     function(settings) {
       console.log(settings);
       document.getElementById('autoAudio').checked = settings.autoAudio;
       document.getElementById('activePages').value = settings.activePages;
       document.getElementById('highlightElements').value = settings.highlightElements;
+      document.getElementById('modifier').value = settings.modifier;
       if (document.getElementById('highlightElements').value === 'all') {
         document.querySelector('#warning').style.display = 'block';
       }
@@ -42,8 +46,9 @@ document.getElementById('save').addEventListener('click', saveOptions);
 
 [
   document.getElementById('autoAudio'),
-  (activePages = document.getElementById('activePages')),
-  (highlightElements = document.getElementById('highlightElements'))
+  document.getElementById('activePages'),
+  document.getElementById('highlightElements'),
+  document.getElementById('modifier')
 ].forEach(el =>
   el.addEventListener('change', () => {
     console.log('changed');

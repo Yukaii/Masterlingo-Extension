@@ -17,7 +17,7 @@
       Auto text-to-speech: 
       <label class="switch" name="text-to-speech">
         <input type="checkbox" id="autoAudio" />
-        <span class="slider round" />
+        <span class="slider round"></span>
       </label>
     </div></div>
     <div class="all-pages">
@@ -44,10 +44,23 @@
                 </option>
               </select>
               <i class="material-icons " id="warning">warning
-                <div class="tooltip">This is an experimental feature and might break certain pages</div>
+                <div class="tooltip"> Experimental feature, might be unreliable. </div>
               </i>
           </div>
     </div>
+    <div class="modifier">
+      <div class="switch-toggle">
+        Show translation button: 
+        <select id="modifier" >
+            <option value="none">
+              Always
+            </option>
+            <option value="alt">
+              when ALT pressed
+            </option>
+          </select>
+      </div>
+</div>
     <div class="change-language">Language settings can be changed <a href="https://masterlingoapp.com/settings"> here.</a></div>
     <div class="save-button__container" ><div class="save-button" id="save">Save changes</div></div>
   </form>

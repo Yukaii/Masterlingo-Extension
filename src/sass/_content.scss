@@ -21,7 +21,7 @@ mark {
     color: $color-black;
     font-family: 'Proxima Nova' !important;
     position: relative;
-    font-weight: 400;
+    font-weight: 400 !important;
   }
   &__new-card--translations {
     width: auto;
@@ -32,12 +32,12 @@ mark {
     width: max-content;
     font-family: 'Proxima Nova' !important;
     overflow-wrap: break-word;
-    font-weight: 400;
+    font-weight: 400 !important;
   }
   &__new-card--header {
     display: flex;
     justify-content: flex-start;
-    align-items: baseline;
+    align-items: center;
     margin-bottom: 5px;
     padding-bottom: 5px;
     border-bottom: 2px solid $color-grey-light-1;
@@ -68,6 +68,7 @@ mark {
     position: relative;
     overflow-wrap: break-word;
     word-wrap: normal;
+    font-family: 'Proxima Nova' !important;
     &:last-of-type {
       margin-right: 25px !important;
     }
@@ -261,6 +262,7 @@ mark {
     padding: 30px 12px 14px 12px;
     text-align: center;
     color: $color-grey-dark-1;
+    font-family: 'Proxima Nova' !important;
   }
 
   &__rating-buttons {
@@ -289,6 +291,7 @@ mark {
   }
 
   &__rating-button {
+    font-family: 'Proxima Nova' !important;
     &--incorrect {
       background-color: $color-red-light-2;
       border-bottom-left-radius: $border-radius;

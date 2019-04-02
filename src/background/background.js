@@ -1,7 +1,7 @@
 import Flashcards from './Flashcards';
 import mslApi from './msLingoApi';
 import _ from 'lodash';
-
+import axios from 'axios';
 let config = {
     loggedIn: false,
     native: '',
@@ -18,6 +18,16 @@ async function init() {
     config.foreign = user.foreign;
     config.username = user.name;
     await flashcards.getFlashcards();
+
+    if (!user.extensionInstalled) {
+      console.log('updating extension installed record');
+      try {
+        const updatedResult = await axios.put('https://masterlingoapp.com/api/user/extension');
+        console.log(updatedResult);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   } else {
   }
   addListeners();

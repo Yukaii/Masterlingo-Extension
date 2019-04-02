@@ -124,7 +124,7 @@ mark {
   color: #000;
   font-family: 'Proxima Nova' !important;
   position: relative;
-  font-weight: 400; }
+  font-weight: 400 !important; }
 
 .masterlingo__new-card--translations {
   width: auto;
@@ -135,12 +135,12 @@ mark {
   width: max-content;
   font-family: 'Proxima Nova' !important;
   overflow-wrap: break-word;
-  font-weight: 400; }
+  font-weight: 400 !important; }
 
 .masterlingo__new-card--header {
   display: flex;
   justify-content: flex-start;
-  align-items: baseline;
+  align-items: center;
   margin-bottom: 5px;
   padding-bottom: 5px;
   border-bottom: 2px solid #f7f7f7;
@@ -169,7 +169,8 @@ mark {
   display: inline-block;
   position: relative;
   overflow-wrap: break-word;
-  word-wrap: normal; }
+  word-wrap: normal;
+  font-family: 'Proxima Nova' !important; }
   .masterlingo__new-card--translation-container:last-of-type {
     margin-right: 25px !important; }
   .masterlingo__new-card--translation-container:last-child {
@@ -328,7 +329,8 @@ mark {
   flex: 1;
   padding: 30px 12px 14px 12px;
   text-align: center;
-  color: #444; }
+  color: #444;
+  font-family: 'Proxima Nova' !important; }
 
 .masterlingo__rating-buttons {
   display: grid;
@@ -351,19 +353,19 @@ mark {
       z-index: 1000;
       color: #fff; }
 
-.masterlingo__rating-button--incorrect {
-  background-color: #ffeae5;
-  border-bottom-left-radius: 4px; }
-  .masterlingo__rating-button--incorrect:hover {
-    background-color: #fe8f76; }
-
-.masterlingo__rating-button--correct {
-  background-color: #d6f9ed; }
-  .masterlingo__rating-button--correct:hover {
-    background-color: #25dea0; }
-
-.masterlingo__rating-button--easy {
-  background-color: #d5e8ff;
-  border-bottom-right-radius: 4px; }
-  .masterlingo__rating-button--easy:hover {
-    background-color: #013e87; }
+.masterlingo__rating-button {
+  font-family: 'Proxima Nova' !important; }
+  .masterlingo__rating-button--incorrect {
+    background-color: #ffeae5;
+    border-bottom-left-radius: 4px; }
+    .masterlingo__rating-button--incorrect:hover {
+      background-color: #fe8f76; }
+  .masterlingo__rating-button--correct {
+    background-color: #d6f9ed; }
+    .masterlingo__rating-button--correct:hover {
+      background-color: #25dea0; }
+  .masterlingo__rating-button--easy {
+    background-color: #d5e8ff;
+    border-bottom-right-radius: 4px; }
+    .masterlingo__rating-button--easy:hover {
+      background-color: #013e87; }

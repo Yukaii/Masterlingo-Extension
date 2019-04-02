@@ -2,7 +2,7 @@
   "name": "Masterlingo",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Learn languages as you scroll. The easiest, most convinient way of using flashcards and srs to acquire vocabulary - right in any webpage.",
+  "description": "Translate, save and learn vocabulary right in any page you browse!",
   "homepage_url": "https://masterlingoapp.com",
   "icons": {
     "16": "icons/icon16.png",
@@ -47,6 +47,6 @@
     "assets/fonts/*.ttf"
   ],
   "externally_connectable": {
-    "matches": ["https://masterlingoapp.com/*", "http://localhost:3000/*"]
+    "matches": ["https://masterlingoapp.com/*", "http://localhost:3000/*", "http://localhost:5000/*"]
   }
 }

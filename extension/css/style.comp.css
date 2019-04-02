@@ -111,16 +111,20 @@ mark {
   color: #db755e !important;
   cursor: pointer;
   background-color: transparent;
-  padding: 0; }
+  padding: 0;
+  transition: all 0.2s ease;
+  text-transform: inherit !important;
+  font-style: inherit !important;
+  font-weight: inherit !important; }
   .masterlingo__marked-word:hover {
-    color: #dba294 !important; }
+    color: #e0c1b9 !important; }
 
 .masterlingo__translation-box {
   flex-direction: column;
   color: #000;
   font-family: 'Proxima Nova' !important;
   position: relative;
-  font-weight: 400; }
+  font-weight: 400 !important; }
 
 .masterlingo__new-card--translations {
   width: auto;
@@ -131,12 +135,12 @@ mark {
   width: max-content;
   font-family: 'Proxima Nova' !important;
   overflow-wrap: break-word;
-  font-weight: 400; }
+  font-weight: 400 !important; }
 
 .masterlingo__new-card--header {
   display: flex;
   justify-content: flex-start;
-  align-items: baseline;
+  align-items: center;
   margin-bottom: 5px;
   padding-bottom: 5px;
   border-bottom: 2px solid #f7f7f7;
@@ -165,7 +169,8 @@ mark {
   display: inline-block;
   position: relative;
   overflow-wrap: break-word;
-  word-wrap: normal; }
+  word-wrap: normal;
+  font-family: 'Proxima Nova' !important; }
   .masterlingo__new-card--translation-container:last-of-type {
     margin-right: 25px !important; }
   .masterlingo__new-card--translation-container:last-child {
@@ -231,17 +236,15 @@ mark {
   min-width: 250px;
   min-height: 110px; }
 
-.masterlingo__translation-box, .masterlingo__new-card-box {
-  transform: translate(-50%, -100%); }
-  .masterlingo__translation-box::after, .masterlingo__new-card-box::after {
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-    top: 100%; }
+.masterlingo__translation-box::after, .masterlingo__new-card-box::after {
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  top: 100%; }
 
 .masterlingo__translation-box, .masterlingo__new-card-box, .masterlingo__new-card--button {
   position: absolute;
   display: none;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #444;
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  backface-visibility: hidden;
   box-sizing: border-box;
   border-radius: 4px;
   color: #444; }
@@ -272,7 +275,6 @@ mark {
   background-color: #013e87;
   color: #fe8f76;
   cursor: pointer;
-  transform: translate(-50%, 100%);
   transition: background-color 0.3s;
   font-family: 'Proxima Nova'; }
   .masterlingo__new-card--button:hover {
@@ -327,7 +329,8 @@ mark {
   flex: 1;
   padding: 30px 12px 14px 12px;
   text-align: center;
-  color: #444; }
+  color: #444;
+  font-family: 'Proxima Nova' !important; }
 
 .masterlingo__rating-buttons {
   display: grid;
@@ -350,17 +353,19 @@ mark {
       z-index: 1000;
       color: #fff; }
 
-.masterlingo__rating-button--incorrect {
-  background-color: #ffeae5; }
-  .masterlingo__rating-button--incorrect:hover {
-    background-color: #fe8f76; }
-
-.masterlingo__rating-button--correct {
-  background-color: #d6f9ed; }
-  .masterlingo__rating-button--correct:hover {
-    background-color: #25dea0; }
-
-.masterlingo__rating-button--easy {
-  background-color: #d5e8ff; }
-  .masterlingo__rating-button--easy:hover {
-    background-color: #013e87; }
+.masterlingo__rating-button {
+  font-family: 'Proxima Nova' !important; }
+  .masterlingo__rating-button--incorrect {
+    background-color: #ffeae5;
+    border-bottom-left-radius: 4px; }
+    .masterlingo__rating-button--incorrect:hover {
+      background-color: #fe8f76; }
+  .masterlingo__rating-button--correct {
+    background-color: #d6f9ed; }
+    .masterlingo__rating-button--correct:hover {
+      background-color: #25dea0; }
+  .masterlingo__rating-button--easy {
+    background-color: #d5e8ff;
+    border-bottom-right-radius: 4px; }
+    .masterlingo__rating-button--easy:hover {
+      background-color: #013e87; }

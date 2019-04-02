@@ -22,6 +22,9 @@ function runContentScript() {
 
       chrome.runtime.sendMessage({ method: 'get', function: 'config' }, function(response) {
         if (response) {
+          if (!response.loggedIn) {
+            return console.log('not logged in, stopping here');
+          }
           config = { ...config, foreign: response.foreign, native: response.native, loggedIn: true };
           getConfig();
         }
@@ -56,7 +59,7 @@ function runContentScript() {
   function selectTargetElements() {
     let targetElements = 'p';
     if (config.highlightElements === 'all') {
-      targetElements = 'p, span, h1, h2, h3, h4, h5, h6, dd';
+      targetElements = 'p, span, h1, h2, h3, h4, h5, h6';
     }
     return document.body.querySelectorAll(targetElements);
   }
@@ -67,12 +70,14 @@ function runContentScript() {
       {
         autoAudio: true,
         activePages: 'all',
-        highlightElements: 'all'
+        highlightElements: 'all',
+        modifier: 'none'
       },
       function(settings) {
         config.autoAudio = settings.autoAudio;
         config.activePages = settings.activePages;
         config.highlightElements = settings.highlightElements;
+        config.modifier = settings.modifier;
         init();
       }
     );
@@ -148,8 +153,8 @@ function runContentScript() {
       }
     });
 
-    document.addEventListener('keydown', () => {
-      if (newCardBox.stage === 'button') {
+    document.addEventListener('keydown', e => {
+      if (newCardBox.stage === 'button' && !e.altKey) {
         newCardBox.hide();
       }
     });
@@ -207,9 +212,9 @@ function runContentScript() {
     });
 
     function handleClickOutside(e) {
-      console.log(e);
       console.log(window.getSelection().toString().length);
       const isNotClickInside = !newCardBox.domSelector.contains(e.target);
+      console.log('handling ouside click');
       if (isNotClickInside && window.getSelection().toString().length < 1 && e.target.textContent !== 'L') {
         document.removeEventListener('click', handleClickOutside);
         if (newCardBox.translationsToSave.length > 0) {
@@ -233,8 +238,12 @@ function runContentScript() {
     }
 
     document.addEventListener('mouseup', function(e) {
+      console.log(e);
       let selection = window.getSelection(); //get the text range
       if (selection.toString()) {
+        if (config.modifier === 'alt' && !e.altKey) {
+          return console.log('alt key no pressed');
+        }
         newCardBox.showButton(selection);
         setTimeout(() => {
           document.addEventListener('click', handleClickOutside);
@@ -250,9 +259,12 @@ function runContentScript() {
       mouseDown = false;
     };
 
-    document.addEventListener('selectionchange', () => {
+    document.addEventListener('selectionchange', e => {
       let selection = window.getSelection(); //get the text range
       if (selection.toString() && !mouseDown) {
+        if (config.modifier === 'alt' && !e.altKey) {
+          return console.log('alt key no pressed');
+        }
         newCardBox.showButton(selection);
         setTimeout(() => {
           document.addEventListener('click', handleClickOutside);
@@ -279,10 +291,7 @@ function runContentScript() {
         if (existingFlashcard) {
           const wordElement = newCardBox.wordElement;
           newCardBox.hide();
-          translationBox.show(wordElement, {
-            ...existingFlashcard,
-            cannotRate: existingFlashcard.cannotRate || !(new Date(existingFlashcard.dueDate) - new Date() < 0)
-          });
+          translationBox.show(wordElement, existingFlashcard);
           e.stopPropagation();
         } else {
           newCardBox.showTranslations(config.foreign);

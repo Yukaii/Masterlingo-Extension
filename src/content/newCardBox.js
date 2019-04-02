@@ -44,7 +44,6 @@ class newCardBox {
     this.domSelector.innerHTML = `<svg class="masterlingo__spinner" width="30px" height="30px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
      </svg>`;
     this.domSelector.classList.replace('masterlingo__new-card--button', 'masterlingo__new-card--translations');
-    if (this.config.autoAudio) textToSpeech(this.term, foreign);
     if (this.flip) {
       this.domSelector.style.transform = `translate(-50%, ${this.height + 25 + 'px'})`;
       this.domSelector.classList.add('masterlingo__flip-after');
@@ -62,6 +61,7 @@ class newCardBox {
       if (!response) return;
       const data = response;
       if (data.translations && !data.error && data.invertable) {
+        if (this.config.autoAudio) textToSpeech(this.term, foreign);
         translationsHTML = data.translations.slice(0, 6).map(translation => {
           return `<div class="masterlingo__new-card--translation-container"><div class="masterlingo__new-card--translation">${translation}</div></div>`;
         });
@@ -73,7 +73,7 @@ class newCardBox {
         }</div><i class="material-icons masterlingo__volume-icon--new">volume_up</i></div>${translationsHTML.join(
           ''
         )}</div>`;
-        if (this.term.length > 25) {
+        if (this.term.length > 12) {
           document.querySelector('.masterlingo__new-card--term').style.fontSize = '17px';
         } else {
           document.querySelector('.masterlingo__new-card--term').style.fontSize = '25px';
@@ -98,6 +98,7 @@ class newCardBox {
       } else {
         this.domSelector.innerHTML = `No translations found, sorry.`;
         this.domSelector.classList.add('masterlingo__error');
+        if (this.config.autoAudio) textToSpeech(this.term, foreign);
       }
     });
   }
