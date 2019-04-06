@@ -19787,7 +19787,7 @@ function runContentScript() {
         let tempCard = flashcard;
         textArray.forEach(word => {
           if (word.toLowerCase() === term.toLowerCase()) {
-            card = tempCard;
+            card = { ...tempCard, cannotRate: new Date(tempCard.dueDate) - new Date() > 0 };
           }
         });
       });

@@ -30,7 +30,7 @@
   "options_page": "src/options/options.html",
   "content_scripts": [
     {
-      "matches": ["*://*/*"],
+      "matches": ["https://*.com/*"],
       "css": ["css/style.css"],
       "js": ["src/content/content.js"],
       "exclude_matches": ["https://masterlingoapp.com/*", "https://www.youtube.com/*", "https://www.instagram.com/*"]
