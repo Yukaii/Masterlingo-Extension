@@ -1,85 +1,116 @@
 .masterlingo__spinner {
   animation: rotator 1.4s linear infinite;
-  width: 30px !important; }
+  width: 30px !important;
+}
 
 @keyframes rotator {
   0% {
-    transform: rotate(0deg); }
+    transform: rotate(0deg);
+  }
   100% {
-    transform: rotate(270deg); } }
+    transform: rotate(270deg);
+  }
+}
 
 .path {
   stroke-dasharray: 187;
   stroke-dashoffset: 0;
   transform-origin: center;
   animation: dash 1.4s ease-in-out infinite;
-  stroke: #013e87; }
+  stroke: #013e87;
+}
 
 @keyframes dash {
   0% {
-    stroke-dashoffset: 187; }
+    stroke-dashoffset: 187;
+  }
   50% {
     stroke-dashoffset: 46.75;
-    transform: rotate(135deg); }
+    transform: rotate(135deg);
+  }
   100% {
     stroke-dashoffset: 187;
-    transform: rotate(450deg); } }
+    transform: rotate(450deg);
+  }
+}
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNovaT-Thin.woff2") format("woff2"), url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNovaT-Thin.woff") format("woff");
+  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNovaT-Thin.woff2') format('woff2'),
+    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNovaT-Thin.woff') format('woff');
   font-weight: 100;
-  font-style: normal; }
+  font-style: normal;
+}
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-ThinIt.woff2") format("woff2"), url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-ThinIt.woff") format("woff");
+  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-ThinIt.woff2') format('woff2'),
+    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-ThinIt.woff') format('woff');
   font-weight: 100;
-  font-style: italic; }
+  font-style: italic;
+}
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Light.woff2") format("woff2"), url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Light.woff") format("woff");
+  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Light.woff2') format('woff2'),
+    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Light.woff') format('woff');
   font-weight: 300;
-  font-style: normal; }
+  font-style: normal;
+}
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Regular.woff2") format("woff2"), url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Regular.woff") format("woff");
+  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Regular.woff2') format('woff2'),
+    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Regular.woff') format('woff');
   font-weight: 400;
-  font-style: normal; }
+  font-style: normal;
+}
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-RegularIt.woff2") format("woff2"), url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-RegularIt.woff") format("woff");
+  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-RegularIt.woff2')
+      format('woff2'),
+    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-RegularIt.woff') format('woff');
   font-weight: 400;
-  font-style: italic; }
+  font-style: italic;
+}
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Semibold.woff2") format("woff2"), url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Semibold.woff") format("woff");
+  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Semibold.woff2')
+      format('woff2'),
+    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Semibold.woff') format('woff');
   font-weight: 500;
-  font-style: normal; }
+  font-style: normal;
+}
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Bold.woff2") format("woff2"), url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Bold.woff") format("woff");
+  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Bold.woff2') format('woff2'),
+    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Bold.woff') format('woff');
   font-weight: 700;
-  font-style: normal; }
+  font-style: normal;
+}
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Black.woff2") format("woff2"), url("chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/ProximaNova-Black.woff") format("woff");
+  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Black.woff2') format('woff2'),
+    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Black.woff') format('woff');
   font-weight: 900;
-  font-style: normal; }
+  font-style: normal;
+}
 
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/MaterialIcons-Regular.eot);
+  src: url(chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/MaterialIcons-Regular.eot);
   /* For IE6-8 */
-  src: local("Material Icons"), local("MaterialIcons-Regular"), url(chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/MaterialIcons-Regular.woff2) format("woff2"), url(chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/MaterialIcons-Regular.woff) format("woff"), url(chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/assets/fonts/MaterialIcons-Regular.ttf) format("truetype"); }
+  src: local('Material Icons'), local('MaterialIcons-Regular'),
+    url(chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/MaterialIcons-Regular.woff2) format('woff2'),
+    url(chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/MaterialIcons-Regular.woff) format('woff'),
+    url(chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
 
 .material-icons {
   font-family: 'Material Icons';
@@ -101,11 +132,13 @@
   /* Support for Firefox. */
   -moz-osx-font-smoothing: grayscale;
   /* Support for IE. */
-  font-feature-settings: 'liga'; }
+  font-feature-settings: 'liga';
+}
 
 mark {
   background-color: transparent !important;
-  color: currentColor !important; }
+  color: currentColor !important;
+}
 
 .masterlingo__marked-word {
   color: #db755e !important;
@@ -115,16 +148,19 @@ mark {
   transition: all 0.2s ease;
   text-transform: inherit !important;
   font-style: inherit !important;
-  font-weight: inherit !important; }
-  .masterlingo__marked-word:hover {
-    color: #e0c1b9 !important; }
+  font-weight: inherit !important;
+}
+.masterlingo__marked-word:hover {
+  color: #e0c1b9 !important;
+}
 
 .masterlingo__translation-box {
   flex-direction: column;
   color: #000;
   font-family: 'Proxima Nova' !important;
   position: relative;
-  font-weight: 400 !important; }
+  font-weight: 400 !important;
+}
 
 .masterlingo__new-card--translations {
   width: auto;
@@ -135,7 +171,8 @@ mark {
   width: max-content;
   font-family: 'Proxima Nova' !important;
   overflow-wrap: break-word;
-  font-weight: 400 !important; }
+  font-weight: 400 !important;
+}
 
 .masterlingo__new-card--header {
   display: flex;
@@ -145,13 +182,15 @@ mark {
   padding-bottom: 5px;
   border-bottom: 2px solid #f7f7f7;
   font-family: 'Proxima Nova' !important;
-  font-weight: 400; }
+  font-weight: 400;
+}
 
 .masterlingo__new-card--term {
   font-size: 25px;
   margin-right: 8px;
   font-weight: 600;
-  font-family: 'Proxima Nova' !important; }
+  font-family: 'Proxima Nova' !important;
+}
 
 .masterlingo__new-card--pos {
   font-family: 'Proxima Nova' !important;
@@ -159,22 +198,27 @@ mark {
   color: #ccc;
   margin-right: 10px;
   user-select: none;
-  font-weight: 400; }
+  font-weight: 400;
+}
 
 .masterlingo__new-card--audio {
   cursor: pointer;
-  margin-left: auto; }
+  margin-left: auto;
+}
 
 .masterlingo__new-card--translation-container {
   display: inline-block;
   position: relative;
   overflow-wrap: break-word;
   word-wrap: normal;
-  font-family: 'Proxima Nova' !important; }
-  .masterlingo__new-card--translation-container:last-of-type {
-    margin-right: 25px !important; }
-  .masterlingo__new-card--translation-container:last-child {
-    margin-right: 25px !important; }
+  font-family: 'Proxima Nova' !important;
+}
+.masterlingo__new-card--translation-container:last-of-type {
+  margin-right: 25px !important;
+}
+.masterlingo__new-card--translation-container:last-child {
+  margin-right: 25px !important;
+}
 
 .masterlingo__error {
   display: flex;
@@ -182,9 +226,11 @@ mark {
   align-items: center;
   padding: 15px;
   font-size: 15px;
-  font-family: 'Proxima Nova'; }
-  .masterlingo__error span {
-    color: #25dea0; }
+  font-family: 'Proxima Nova';
+}
+.masterlingo__error span {
+  color: #25dea0;
+}
 
 .masterlingo__new-card--translation {
   font-family: 'Proxima Nova';
@@ -200,69 +246,94 @@ mark {
   position: relative;
   user-select: none;
   color: #444 !important;
-  overflow-wrap: break-word; }
-  .masterlingo__new-card--translation:hover {
-    background-color: #25dea0; }
-    .masterlingo__new-card--translation:hover::before {
-      transform: translateY(-50%) rotate(0deg) !important; }
-  .masterlingo__new-card--translation::after, .masterlingo__new-card--translation::before {
-    content: '';
-    height: 12px;
-    position: absolute;
-    width: 2px;
-    background-color: #444;
-    top: 50%;
-    left: 10px;
-    border-radius: 1px;
-    transition: all 0.2s;
-    transform: translateY(-50%) rotate(90deg);
-    z-index: 1000; }
-  .masterlingo__new-card--translation.saved-translation {
-    background-color: #7eebc7;
-    transform: scale(0.95);
-    box-shadow: none; }
-    .masterlingo__new-card--translation.saved-translation::before {
-      transform: translateY(-50%); }
-    .masterlingo__new-card--translation.saved-translation::after, .masterlingo__new-card--translation.saved-translation::before {
-      width: 3px; }
+  overflow-wrap: break-word;
+}
+.masterlingo__new-card--translation:hover {
+  background-color: #25dea0;
+}
+.masterlingo__new-card--translation:hover::before {
+  transform: translateY(-50%) rotate(0deg) !important;
+}
+.masterlingo__new-card--translation::after,
+.masterlingo__new-card--translation::before {
+  content: '';
+  height: 12px;
+  position: absolute;
+  width: 2px;
+  background-color: #444;
+  top: 50%;
+  left: 10px;
+  border-radius: 1px;
+  transition: all 0.2s;
+  transform: translateY(-50%) rotate(90deg);
+  z-index: 1000;
+}
+.masterlingo__new-card--translation.saved-translation {
+  background-color: #7eebc7;
+  transform: scale(0.95);
+  box-shadow: none;
+}
+.masterlingo__new-card--translation.saved-translation::before {
+  transform: translateY(-50%);
+}
+.masterlingo__new-card--translation.saved-translation::after,
+.masterlingo__new-card--translation.saved-translation::before {
+  width: 3px;
+}
 
 .masterlingo__new-card--container {
   width: 100%;
   height: 100%;
-  padding: 10px; }
+  padding: 10px;
+}
 
 .masterlingo__translation-box {
   background-color: #fff;
   min-width: 250px;
-  min-height: 110px; }
+  min-height: 110px;
+}
 
-.masterlingo__translation-box::after, .masterlingo__new-card-box::after {
+.masterlingo__translation-box::after,
+.masterlingo__new-card-box::after {
   clip-path: polygon(0 0, 100% 0, 50% 100%);
-  top: 100%; }
+  top: 100%;
+}
 
-.masterlingo__translation-box, .masterlingo__new-card-box, .masterlingo__new-card--button {
+.masterlingo__translation-box,
+.masterlingo__new-card-box,
+.masterlingo__new-card--button {
   position: absolute;
   display: none;
   box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
   backface-visibility: hidden;
   box-sizing: border-box;
   border-radius: 4px;
-  color: #444; }
-  .masterlingo__translation-box--active, .masterlingo__new-card-box--active, .masterlingo__new-card--button--active {
-    display: flex;
-    z-index: 1000; }
-    .masterlingo__translation-box--active::after, .masterlingo__new-card-box--active::after, .masterlingo__new-card--button--active::after {
-      opacity: 1 !important;
-      z-index: 1000; }
-  .masterlingo__translation-box::after, .masterlingo__new-card-box::after, .masterlingo__new-card--button::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 15px;
-    width: 20px;
-    background-color: #666;
-    opacity: 0; }
+  color: #444;
+}
+.masterlingo__translation-box--active,
+.masterlingo__new-card-box--active,
+.masterlingo__new-card--button--active {
+  display: flex;
+  z-index: 1000;
+}
+.masterlingo__translation-box--active::after,
+.masterlingo__new-card-box--active::after,
+.masterlingo__new-card--button--active::after {
+  opacity: 1 !important;
+  z-index: 1000;
+}
+.masterlingo__translation-box::after,
+.masterlingo__new-card-box::after,
+.masterlingo__new-card--button::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 15px;
+  width: 20px;
+  background-color: #666;
+  opacity: 0;
+}
 
 .masterlingo__new-card--button {
   display: flex;
@@ -276,37 +347,49 @@ mark {
   color: #fe8f76;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-family: 'Proxima Nova'; }
-  .masterlingo__new-card--button:hover {
-    background-color: #014aa0; }
-  .masterlingo__new-card--button::after {
-    clip-path: polygon(0 100%, 100% 100%, 50% 0%);
-    top: -15px; }
-  .masterlingo__new-card--button span {
-    color: #25dea0 !important; }
+  font-family: 'Proxima Nova';
+}
+.masterlingo__new-card--button:hover {
+  background-color: #014aa0;
+}
+.masterlingo__new-card--button::after {
+  clip-path: polygon(0 100%, 100% 100%, 50% 0%);
+  top: -15px;
+}
+.masterlingo__new-card--button span {
+  color: #25dea0 !important;
+}
 
 .masterlingo__flip-after::after {
   clip-path: polygon(0 100%, 100% 100%, 50% 0%);
-  top: -15px; }
+  top: -15px;
+}
 
 .masterlingo__volume-icon {
   position: absolute;
   top: 7px;
-  right: 7px; }
-  .masterlingo__volume-icon--new {
-    margin-left: auto; }
-  .masterlingo__volume-icon, .masterlingo__volume-icon--new {
-    color: #ccc;
-    font-size: 25px !important;
-    user-select: none !important;
-    cursor: pointer; }
-    .masterlingo__volume-icon:hover, .masterlingo__volume-icon--new:hover {
-      color: #25dea0; }
+  right: 7px;
+}
+.masterlingo__volume-icon--new {
+  margin-left: auto;
+}
+.masterlingo__volume-icon,
+.masterlingo__volume-icon--new {
+  color: #ccc;
+  font-size: 25px !important;
+  user-select: none !important;
+  cursor: pointer;
+}
+.masterlingo__volume-icon:hover,
+.masterlingo__volume-icon--new:hover {
+  color: #25dea0;
+}
 
 .masterlingo__new-card-box {
   display: flex;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+}
 
 .masterlingo__delete-icon {
   position: absolute;
@@ -316,9 +399,11 @@ mark {
   font-size: 21px !important;
   cursor: pointer;
   user-select: none !important;
-  transition: color 0.5s ease; }
-  .masterlingo__delete-icon:hover {
-    color: #ccc; }
+  transition: color 0.5s ease;
+}
+.masterlingo__delete-icon:hover {
+  color: #ccc;
+}
 
 .masterlingo__translations-container {
   display: flex;
@@ -328,42 +413,53 @@ mark {
   padding: 30px 12px 14px 12px;
   text-align: center;
   color: #444;
-  font-family: 'Proxima Nova' !important; }
+  font-family: 'Proxima Nova' !important;
+}
 
 .masterlingo__rating-buttons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   height: 27px;
-  box-sizing: border-box; }
-  .masterlingo__rating-buttons > div {
-    z-index: 0;
-    cursor: pointer;
-    font-weight: 500;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #444;
-    font-size: 11px;
-    transition: all 0.4s ease, color 0.5s ease, background-color 0.5s ease;
-    margin: 0; }
-    .masterlingo__rating-buttons > div:hover {
-      z-index: 1000;
-      color: #fff; }
+  box-sizing: border-box;
+}
+.masterlingo__rating-buttons > div {
+  z-index: 0;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #444;
+  font-size: 11px;
+  transition: all 0.4s ease, color 0.5s ease, background-color 0.5s ease;
+  margin: 0;
+}
+.masterlingo__rating-buttons > div:hover {
+  z-index: 1000;
+  color: #fff;
+}
 
 .masterlingo__rating-button {
-  font-family: 'Proxima Nova' !important; }
-  .masterlingo__rating-button--incorrect {
-    background-color: #ffeae5;
-    border-bottom-left-radius: 4px; }
-    .masterlingo__rating-button--incorrect:hover {
-      background-color: #fe8f76; }
-  .masterlingo__rating-button--correct {
-    background-color: #d6f9ed; }
-    .masterlingo__rating-button--correct:hover {
-      background-color: #25dea0; }
-  .masterlingo__rating-button--easy {
-    background-color: #d5e8ff;
-    border-bottom-right-radius: 4px; }
-    .masterlingo__rating-button--easy:hover {
-      background-color: #013e87; }
+  font-family: 'Proxima Nova' !important;
+}
+.masterlingo__rating-button--incorrect {
+  background-color: #ffeae5;
+  border-bottom-left-radius: 4px;
+}
+.masterlingo__rating-button--incorrect:hover {
+  background-color: #fe8f76;
+}
+.masterlingo__rating-button--correct {
+  background-color: #d6f9ed;
+}
+.masterlingo__rating-button--correct:hover {
+  background-color: #25dea0;
+}
+.masterlingo__rating-button--easy {
+  background-color: #d5e8ff;
+  border-bottom-right-radius: 4px;
+}
+.masterlingo__rating-button--easy:hover {
+  background-color: #013e87;
+}

@@ -6,7 +6,7 @@ chrome.runtime.sendMessage({ method: 'get', function: 'config' }, function(respo
       response.username
     }! </div> <div class="loggedIn"> Highlight a word to start. </div>
       <div class="icons-container">
-      <a target="_blank" href="chrome-extension://fpafbifeckmpbhpdphbgibckhmjngamn/src/options/options.html" class="nostyle icon__settings icon__container"><i class="nostyle material-icons icon">settings</i>Options</a>
+      <a target="_blank" href="chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/src/options/options.html" class="nostyle icon__settings icon__container"><i class="nostyle material-icons icon">settings</i>Options</a>
       <a target="_blank" href="https://masterlingoapp.com" class="nostyle icon__practise icon__container"><i class="material-icons icon">school</i>Review</a><a target="_blank" href="https://masterlingoapp.com/collection" class="nostyle icon__practise icon__container"><i class="material-icons icon">layers</i>Collection</a></div>
     `;
   } else {
