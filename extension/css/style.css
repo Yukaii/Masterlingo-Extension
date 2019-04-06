@@ -294,9 +294,7 @@ mark {
   top: 7px;
   right: 7px; }
   .masterlingo__volume-icon--new {
-    justify-self: flex-end;
-    margin-left: auto;
-    transform: translateY(5px); }
+    margin-left: auto; }
   .masterlingo__volume-icon, .masterlingo__volume-icon--new {
     color: #ccc;
     font-size: 25px !important;

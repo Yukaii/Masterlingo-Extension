@@ -20,13 +20,9 @@ async function init() {
     await flashcards.getFlashcards();
 
     if (!user.extensionInstalled) {
-      console.log('updating extension installed record');
       try {
         const updatedResult = await axios.put('https://masterlingoapp.com/api/user/extension');
-        console.log(updatedResult);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     }
   } else {
   }
@@ -41,8 +37,6 @@ function addListeners() {
 }
 
 function handleMessages(request, sender, sendResponse) {
-  console.log('got message');
-  console.log(request);
   switch (request.method) {
     case 'get':
       switch (request.function) {

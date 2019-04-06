@@ -3,7 +3,6 @@ function saveOptions() {
     activePages = document.getElementById('activePages').value,
     highlightElements = document.getElementById('highlightElements').value;
   modifier = document.getElementById('modifier').value;
-  console.log(autoAudio);
   chrome.storage.sync.set(
     {
       autoAudio,
@@ -12,7 +11,6 @@ function saveOptions() {
       modifier
     },
     function() {
-      console.log('successfully saved');
       document.getElementById('save').style.display = 'none';
     }
   );
@@ -30,7 +28,6 @@ function restoreOptions() {
       modifier: 'none'
     },
     function(settings) {
-      console.log(settings);
       document.getElementById('autoAudio').checked = settings.autoAudio;
       document.getElementById('activePages').value = settings.activePages;
       document.getElementById('highlightElements').value = settings.highlightElements;
@@ -51,7 +48,6 @@ document.getElementById('save').addEventListener('click', saveOptions);
   document.getElementById('modifier')
 ].forEach(el =>
   el.addEventListener('change', () => {
-    console.log('changed');
     document.getElementById('save').style.display = 'block';
     if (document.getElementById('highlightElements').value === 'all') {
       document.querySelector('#warning').style.display = 'block';

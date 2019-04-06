@@ -1,8 +1,9 @@
 {
-  "name": "Masterlingo",
-  "version": "0.0.1",
+  "name": "Masterlingo - Learn languages as you scroll",
+  "short_name": "Masterlingo",
+  "version": "0.7.3",
   "manifest_version": 2,
-  "description": "Translate, save and learn vocabulary right in any page you browse!",
+  "description": "Translate, save and learn vocabulary right in any page!",
   "homepage_url": "https://masterlingoapp.com",
   "icons": {
     "16": "icons/icon16.png",
@@ -21,19 +22,15 @@
     "css": ["browser_action/popup.css"]
   },
   "permissions": [
-    "tts",
-    "cookies",
     "http://masterlingoapp.com/",
     "http://masterlingoapp.com/*",
     "http://masterlingoapp.com/api/*",
-    "activeTab",
-    "declarativeContent",
     "storage"
   ],
   "options_page": "src/options/options.html",
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["*://*/*"],
       "css": ["css/style.css"],
       "js": ["src/content/content.js"],
       "exclude_matches": ["https://masterlingoapp.com/*", "https://www.youtube.com/*", "https://www.instagram.com/*"]

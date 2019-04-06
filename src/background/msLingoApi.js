@@ -1,5 +1,4 @@
 import axios from 'axios';
-console.log(axios);
 
 const masterLingoApi = axios.create({
   baseURL: 'https://masterlingoapp.com/api'
@@ -15,7 +14,6 @@ async function login() {
       return false;
     }
   } catch (err) {
-    console.log(err);
     return false;
   }
 }

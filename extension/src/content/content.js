@@ -19723,9 +19723,7 @@ function runContentScript() {
     });
 
     function handleClickOutside(e) {
-      console.log(window.getSelection().toString().length);
       const isNotClickInside = !newCardBox.domSelector.contains(e.target);
-      console.log('handling ouside click');
       if (isNotClickInside && window.getSelection().toString().length < 1 && e.target.textContent !== 'L') {
         document.removeEventListener('click', handleClickOutside);
         if (newCardBox.translationsToSave.length > 0) {
@@ -19749,7 +19747,6 @@ function runContentScript() {
     }
 
     document.addEventListener('mouseup', function(e) {
-      console.log(e);
       let selection = window.getSelection(); //get the text range
       if (selection.toString()) {
         if (config.modifier === 'alt' && !e.altKey) {

@@ -19241,13 +19241,9 @@ async function init() {
     await flashcards.getFlashcards();
 
     if (!user.extensionInstalled) {
-      console.log('updating extension installed record');
       try {
         const updatedResult = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put('https://masterlingoapp.com/api/user/extension');
-        console.log(updatedResult);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     }
   } else {
   }
@@ -19262,8 +19258,6 @@ function addListeners() {
 }
 
 function handleMessages(request, sender, sendResponse) {
-  console.log('got message');
-  console.log(request);
   switch (request.method) {
     case 'get':
       switch (request.function) {
@@ -19449,7 +19443,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
-console.log(axios__WEBPACK_IMPORTED_MODULE_0___default.a);
 
 const masterLingoApi = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
   baseURL: 'https://masterlingoapp.com/api'
@@ -19465,7 +19458,6 @@ async function login() {
       return false;
     }
   } catch (err) {
-    console.log(err);
     return false;
   }
 }
