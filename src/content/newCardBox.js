@@ -29,9 +29,8 @@ class newCardBox {
       this.domSelector.classList.add('masterlingo__new-card--button');
       this.domSelector.classList.add('masterlingo__new-card-box--active');
       this.setPosition(wordElement);
-      this.domSelector.innerHTML = `M<span>L</span>`;
       this.domSelector.style.transform = `translate(-50%, 100%)`;
-
+      this.domSelector.innerHTML = ``;
       this.term = selectedText;
       this.stage = 'button';
     }

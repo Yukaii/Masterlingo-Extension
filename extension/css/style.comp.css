@@ -36,66 +36,66 @@
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNovaT-Thin.woff2') format('woff2'),
-    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNovaT-Thin.woff') format('woff');
+  src: url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNovaT-Thin.woff2') format('woff2'),
+    url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNovaT-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-ThinIt.woff2') format('woff2'),
-    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-ThinIt.woff') format('woff');
+  src: url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-ThinIt.woff2') format('woff2'),
+    url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-ThinIt.woff') format('woff');
   font-weight: 100;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Light.woff2') format('woff2'),
-    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Light.woff') format('woff');
+  src: url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Light.woff2') format('woff2'),
+    url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Regular.woff2') format('woff2'),
-    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Regular.woff') format('woff');
+  src: url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Regular.woff2') format('woff2'),
+    url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Regular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-RegularIt.woff2')
+  src: url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-RegularIt.woff2')
       format('woff2'),
-    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-RegularIt.woff') format('woff');
+    url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-RegularIt.woff') format('woff');
   font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Semibold.woff2')
+  src: url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Semibold.woff2')
       format('woff2'),
-    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Semibold.woff') format('woff');
+    url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Semibold.woff') format('woff');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Bold.woff2') format('woff2'),
-    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Bold.woff') format('woff');
+  src: url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Bold.woff2') format('woff2'),
+    url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Black.woff2') format('woff2'),
-    url('chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/ProximaNova-Black.woff') format('woff');
+  src: url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Black.woff2') format('woff2'),
+    url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/ProximaNova-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
 }
@@ -104,12 +104,12 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/MaterialIcons-Regular.eot);
+  src: url(chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/MaterialIcons-Regular.eot);
   /* For IE6-8 */
   src: local('Material Icons'), local('MaterialIcons-Regular'),
-    url(chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/MaterialIcons-Regular.woff2) format('woff2'),
-    url(chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/MaterialIcons-Regular.woff) format('woff'),
-    url(chrome-extension://mendomakfhndbblfdphgaigjkinbhdmb/assets/fonts/MaterialIcons-Regular.ttf) format('truetype');
+    url(chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/MaterialIcons-Regular.woff2) format('woff2'),
+    url(chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/MaterialIcons-Regular.woff) format('woff'),
+    url(chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
 
 .material-icons {

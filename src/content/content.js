@@ -213,7 +213,7 @@ function runContentScript() {
 
     function handleClickOutside(e) {
       const isNotClickInside = !newCardBox.domSelector.contains(e.target);
-      if (isNotClickInside && window.getSelection().toString().length < 1 && e.target.textContent !== 'L') {
+      if (isNotClickInside && window.getSelection().toString().length < 1) {
         document.removeEventListener('click', handleClickOutside);
         if (newCardBox.translationsToSave.length > 0) {
           const translations = newCardBox.translationsToSave,
@@ -239,7 +239,7 @@ function runContentScript() {
       let selection = window.getSelection(); //get the text range
       if (selection.toString()) {
         if (config.modifier === 'alt' && !e.altKey) {
-          return console.log('alt key no pressed');
+          return;
         }
         newCardBox.showButton(selection);
         setTimeout(() => {
@@ -260,7 +260,7 @@ function runContentScript() {
       let selection = window.getSelection(); //get the text range
       if (selection.toString() && !mouseDown) {
         if (config.modifier === 'alt' && !e.altKey) {
-          return console.log('alt key no pressed');
+          return;
         }
         newCardBox.showButton(selection);
         setTimeout(() => {

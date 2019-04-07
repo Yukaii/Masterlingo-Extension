@@ -184,6 +184,9 @@ mark {
       opacity: 0;
     }
   }
+  &__new-card--logo {
+    height: 30px;
+  }
   &__new-card--button {
     display: flex;
     justify-content: center;
@@ -193,13 +196,14 @@ mark {
     font-size: 20px;
     font-weight: 600;
     background-color: $color-blue;
-    color: $color-red-light;
     cursor: pointer;
     transition: background-color 0.3s;
     font-family: 'Proxima Nova';
-
+    background-image: url('chrome-extension://fbfmjjebfpcefapmipcbckbdpfnjhfmj/assets/logo.png');
+    background-position: center;
+    background-repeat: no-repeat;
     &:hover {
-      background-color: lighten($color-blue, 5);
+      background-color: lighten($color-blue, 10);
     }
     &::after {
       clip-path: polygon(0 100%, 100% 100%, 50% 0%);

@@ -19261,9 +19261,8 @@ class newCardBox {
       this.domSelector.classList.add('masterlingo__new-card--button');
       this.domSelector.classList.add('masterlingo__new-card-box--active');
       this.setPosition(wordElement);
-      this.domSelector.innerHTML = `M<span>L</span>`;
       this.domSelector.style.transform = `translate(-50%, 100%)`;
-
+      this.domSelector.innerHTML = ``;
       this.term = selectedText;
       this.stage = 'button';
     }
@@ -19724,7 +19723,7 @@ function runContentScript() {
 
     function handleClickOutside(e) {
       const isNotClickInside = !newCardBox.domSelector.contains(e.target);
-      if (isNotClickInside && window.getSelection().toString().length < 1 && e.target.textContent !== 'L') {
+      if (isNotClickInside && window.getSelection().toString().length < 1) {
         document.removeEventListener('click', handleClickOutside);
         if (newCardBox.translationsToSave.length > 0) {
           const translations = newCardBox.translationsToSave,
@@ -19750,7 +19749,7 @@ function runContentScript() {
       let selection = window.getSelection(); //get the text range
       if (selection.toString()) {
         if (config.modifier === 'alt' && !e.altKey) {
-          return console.log('alt key no pressed');
+          return;
         }
         newCardBox.showButton(selection);
         setTimeout(() => {
@@ -19771,7 +19770,7 @@ function runContentScript() {
       let selection = window.getSelection(); //get the text range
       if (selection.toString() && !mouseDown) {
         if (config.modifier === 'alt' && !e.altKey) {
-          return console.log('alt key no pressed');
+          return;
         }
         newCardBox.showButton(selection);
         setTimeout(() => {
